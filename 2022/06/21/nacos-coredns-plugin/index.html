@@ -16,21 +16,21 @@
   <meta name="author" content="Soar Yu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+    <meta name="description" content="nacos-coredns-plugin部署原来nacos-coredns-plugin的master分支使用的是 coredns v1.2.6 版本，里面的依赖由于时间太久没有更新，导致导入的时候会报错，所以我们需要更新到v1.6.7的版本。 切换v1.6.7分支1234git clone https:&#x2F;&#x2F;github.com&#x2F;nacos-group&#x2F;nacos-coredns-plugin.g">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://example.com/2022/06/21/hello-world/index.html">
+<meta property="og:title" content="nacos-coredns-plugin">
+<meta property="og:url" content="http://example.com/2022/06/21/nacos-coredns-plugin/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="nacos-coredns-plugin部署原来nacos-coredns-plugin的master分支使用的是 coredns v1.2.6 版本，里面的依赖由于时间太久没有更新，导致导入的时候会报错，所以我们需要更新到v1.6.7的版本。 切换v1.6.7分支1234git clone https:&#x2F;&#x2F;github.com&#x2F;nacos-group&#x2F;nacos-coredns-plugin.g">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-06-21T07:21:43.000Z">
-<meta property="article:modified_time" content="2022-06-21T07:21:53.594Z">
+<meta property="article:published_time" content="2022-06-21T11:53:43.000Z">
+<meta property="article:modified_time" content="2022-06-21T14:07:02.429Z">
 <meta property="article:author" content="Soar Yu">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Hello World - Hexo</title>
+  <title>nacos-coredns-plugin - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -183,7 +183,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Hello World"></span>
+            <span id="subtitle" data-typed-text="nacos-coredns-plugin"></span>
           
         </div>
 
@@ -194,8 +194,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-21 15:21" pubdate>
-          2022年6月21日 下午
+        <time datetime="2022-06-21 19:53" pubdate>
+          2022年6月21日 晚上
         </time>
       </span>
     
@@ -206,7 +206,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          367 字
+          1.6k 字
         
       </span>
     
@@ -217,7 +217,7 @@
         
         
         
-          4 分钟
+          14 分钟
         
       </span>
     
@@ -255,25 +255,22 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Hello World</h1>
+            <h1 style="display: none">nacos-coredns-plugin</h1>
             
             
               <div class="markdown-body">
                 
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+                <h2 id="nacos-coredns-plugin部署"><a href="#nacos-coredns-plugin部署" class="headerlink" title="nacos-coredns-plugin部署"></a>nacos-coredns-plugin部署</h2><p>原来nacos-coredns-plugin的master分支使用的是 coredns v1.2.6 版本，里面的依赖由于时间太久没有更新，导致导入的时候会报错，所以我们需要更新到v1.6.7的版本。</p>
+<h3 id="切换v1-6-7分支"><a href="#切换v1-6-7分支" class="headerlink" title="切换v1.6.7分支"></a>切换v1.6.7分支</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">git clone https://github.com/nacos-group/nacos-coredns-plugin.git<br>cd nacos-coredns-plugin<br>git checkout -b v1.6.7 origin/v1.6.7<br>vi nacos-coredns-plugin/bin/build.sh<br></code></pre></td></tr></table></figure>
+<h3 id="将build-sh脚本修改为以下内容："><a href="#将build-sh脚本修改为以下内容：" class="headerlink" title="将build.sh脚本修改为以下内容："></a>将build.sh脚本修改为以下内容：</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/usr/bin/env bash</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">cd</span> GOPATH</span><br>cd $GOPATH/src/<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">remove codes</span><br>rm -rf coredns<br>rm -rf nacos-coredns-plugin<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">clone</span> current codes</span><br>git clone https://github.com/coredns/coredns.git<br>git clone https://github.com/nacos-group/nacos-coredns-plugin.git<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">cd</span> coredns directory</span><br>cd $GOPATH/src/nacos-coredns-plugin<br>git checkout -b v1.6.7 origin/v1.6.7<br>cd $GOPATH/src/coredns<br>git checkout -b v1.6.7 v1.6.7<br>go get github.com/cihub/seelog<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">copy nacos plugin to coredns</span><br>cp -r ../nacos-coredns-plugin/nacos plugin/<br>cp -r ../nacos-coredns-plugin/forward/setup.go plugin/forward<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">insert nacos into plugin</span><br>sed -i &#x27;/hosts/a\\t&quot;nacos&quot;,&#x27; core/dnsserver/zdirectives.go<br>sed -i &#x27;/coredns\/plugin\/hosts/a\\t&quot;coredns/plugin/nacos&quot;&#x27; core/plugin/zplugin.go<br>sed -i &#x27;/hosts:hosts/a\\t_ nacos:nacos&#x27; plugin.cfg<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">build</span><br>make<br></code></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
+<h3 id="创建nacos-coredns配置文件"><a href="#创建nacos-coredns配置文件" class="headerlink" title="创建nacos-coredns配置文件"></a>创建nacos-coredns配置文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">mkdir conf<br>vi conf/nacos-coredns.cfg<br></code></pre></td></tr></table></figure>
+<p>配置文件内容为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">. &#123;<br>    nacos &#123;<br>        upstream /etc/resolv.conf<br>        nacos_server 127.0.0.1<br>        nacos_server_port 8848<br>   &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
+<p>upstream: 未在 Nacos 中注册的域名将被转发到上游。<br>nacos_server: Nacos服务器的ip，如果有两个或多个Nacos服务器，用逗号分隔<br>nacos_server_port: Nacos服务器端口</p>
+<h3 id="在coredns模块下运行nacos-coredns-plugin"><a href="#在coredns模块下运行nacos-coredns-plugin" class="headerlink" title="在coredns模块下运行nacos-coredns-plugin"></a>在coredns模块下运行nacos-coredns-plugin</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">cd $GOPATH/src/coredns<br>./coredns -conf=conf/nacos-coredns.cfg -dns.port 1053<br></code></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
+<h3 id="测试dig-nacos-service-name-127-0-0-1-p-dns-port"><a href="#测试dig-nacos-service-name-127-0-0-1-p-dns-port" class="headerlink" title="测试dig $nacos_service_name @127.0.0.1 -p $dns_port"></a>测试dig $nacos_service_name @127.0.0.1 -p $dns_port</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">在终端中输入： <br>    dig hello123 @127.0.0.1 -p 1053<br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -291,7 +288,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Hexo/" class="category-chain-item">Hexo</a>
+  <a href="/categories/nacos/" class="category-chain-item">nacos</a>
   
   
 
@@ -311,8 +308,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Hello World</div>
-      <div>http://example.com/2022/06/21/hello-world/</div>
+      <div>nacos-coredns-plugin</div>
+      <div>http://example.com/2022/06/21/nacos-coredns-plugin/</div>
     </div>
     <div class="license-meta">
       
@@ -354,18 +351,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/06/21/nacos-coredns-plugin/" title="nacos-coredns-plugin">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">nacos-coredns-plugin</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/06/21/nacos-docker/" title="nacos-docker">
-                        <span class="hidden-mobile">nacos-docker</span>
+                      <a href="/2022/06/21/hello-world/" title="Hello World">
+                        <span class="hidden-mobile">Hello World</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

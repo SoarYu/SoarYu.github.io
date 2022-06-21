@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>nacos-coredns-plugin</title>
+    <link href="/2022/06/21/nacos-coredns-plugin/"/>
+    <url>/2022/06/21/nacos-coredns-plugin/</url>
+    
+    <content type="html"><![CDATA[<h2 id="nacos-coredns-plugin部署"><a href="#nacos-coredns-plugin部署" class="headerlink" title="nacos-coredns-plugin部署"></a>nacos-coredns-plugin部署</h2><p>原来nacos-coredns-plugin的master分支使用的是 coredns v1.2.6 版本，里面的依赖由于时间太久没有更新，导致导入的时候会报错，所以我们需要更新到v1.6.7的版本。</p><h3 id="切换v1-6-7分支"><a href="#切换v1-6-7分支" class="headerlink" title="切换v1.6.7分支"></a>切换v1.6.7分支</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">git clone https://github.com/nacos-group/nacos-coredns-plugin.git<br>cd nacos-coredns-plugin<br>git checkout -b v1.6.7 origin/v1.6.7<br>vi nacos-coredns-plugin/bin/build.sh<br></code></pre></td></tr></table></figure><h3 id="将build-sh脚本修改为以下内容："><a href="#将build-sh脚本修改为以下内容：" class="headerlink" title="将build.sh脚本修改为以下内容："></a>将build.sh脚本修改为以下内容：</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/usr/bin/env bash</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">cd</span> GOPATH</span><br>cd $GOPATH/src/<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">remove codes</span><br>rm -rf coredns<br>rm -rf nacos-coredns-plugin<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">clone</span> current codes</span><br>git clone https://github.com/coredns/coredns.git<br>git clone https://github.com/nacos-group/nacos-coredns-plugin.git<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">cd</span> coredns directory</span><br>cd $GOPATH/src/nacos-coredns-plugin<br>git checkout -b v1.6.7 origin/v1.6.7<br>cd $GOPATH/src/coredns<br>git checkout -b v1.6.7 v1.6.7<br>go get github.com/cihub/seelog<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">copy nacos plugin to coredns</span><br>cp -r ../nacos-coredns-plugin/nacos plugin/<br>cp -r ../nacos-coredns-plugin/forward/setup.go plugin/forward<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">insert nacos into plugin</span><br>sed -i &#x27;/hosts/a\\t&quot;nacos&quot;,&#x27; core/dnsserver/zdirectives.go<br>sed -i &#x27;/coredns\/plugin\/hosts/a\\t&quot;coredns/plugin/nacos&quot;&#x27; core/plugin/zplugin.go<br>sed -i &#x27;/hosts:hosts/a\\t_ nacos:nacos&#x27; plugin.cfg<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">build</span><br>make<br></code></pre></td></tr></table></figure><h3 id="创建nacos-coredns配置文件"><a href="#创建nacos-coredns配置文件" class="headerlink" title="创建nacos-coredns配置文件"></a>创建nacos-coredns配置文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">mkdir conf<br>vi conf/nacos-coredns.cfg<br></code></pre></td></tr></table></figure><p>配置文件内容为：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">. &#123;<br>    nacos &#123;<br>        upstream /etc/resolv.conf<br>        nacos_server 127.0.0.1<br>        nacos_server_port 8848<br>   &#125;<br> &#125;<br></code></pre></td></tr></table></figure><p>upstream: 未在 Nacos 中注册的域名将被转发到上游。<br>nacos_server: Nacos服务器的ip，如果有两个或多个Nacos服务器，用逗号分隔<br>nacos_server_port: Nacos服务器端口</p><h3 id="在coredns模块下运行nacos-coredns-plugin"><a href="#在coredns模块下运行nacos-coredns-plugin" class="headerlink" title="在coredns模块下运行nacos-coredns-plugin"></a>在coredns模块下运行nacos-coredns-plugin</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">cd $GOPATH/src/coredns<br>./coredns -conf=conf/nacos-coredns.cfg -dns.port 1053<br></code></pre></td></tr></table></figure><h3 id="测试dig-nacos-service-name-127-0-0-1-p-dns-port"><a href="#测试dig-nacos-service-name-127-0-0-1-p-dns-port" class="headerlink" title="测试dig $nacos_service_name @127.0.0.1 -p $dns_port"></a>测试dig $nacos_service_name @127.0.0.1 -p $dns_port</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">在终端中输入： <br>    dig hello123 @127.0.0.1 -p 1053<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>nacos</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Hello World</title>
     <link href="/2022/06/21/hello-world/"/>
     <url>/2022/06/21/hello-world/</url>
@@ -14,6 +33,25 @@
     <categories>
       
       <category>Hexo</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>nacos-docker</title>
+    <link href="/2022/06/21/nacos-docker/"/>
+    <url>/2022/06/21/nacos-docker/</url>
+    
+    <content type="html"><![CDATA[<h2 id="git拉取nacos-docker2-1-0版本"><a href="#git拉取nacos-docker2-1-0版本" class="headerlink" title="git拉取nacos-docker2.1.0版本"></a>git拉取nacos-docker2.1.0版本</h2><p>git clone <a href="https://github.com/nacos-group/nacos-docker.git">https://github.com/nacos-group/nacos-docker.git</a><br>cd nacos-docker<br>git checkout -b v2.1.0 v2.1.0</p><h2 id="docker-官方拉取"><a href="#docker-官方拉取" class="headerlink" title="docker 官方拉取"></a>docker 官方拉取</h2><pre><code class="hljs">docker pull nacos/nacos-server:latest</code></pre><h3 id="创建本地的映射文件，custom-properties，"><a href="#创建本地的映射文件，custom-properties，" class="headerlink" title="创建本地的映射文件，custom.properties，"></a>创建本地的映射文件，custom.properties，</h3><pre><code class="hljs">mkdir -p /root/nacos/init.d /root/nacos/logstouch /root/nacos/init.d/custom.properties</code></pre><h3 id="在文件中写入以下配置"><a href="#在文件中写入以下配置" class="headerlink" title="在文件中写入以下配置"></a>在文件中写入以下配置</h3><pre><code class="hljs">management.endpoints.web.exposure.include=*</code></pre><h2 id="initialize-the-mysql-database"><a href="#initialize-the-mysql-database" class="headerlink" title="initialize the mysql  database"></a>initialize the mysql  database</h2><p>get the  database script from  <a href="https://github.com/alibaba/nacos/blob/develop/distribution/conf/nacos-mysql.sql">https://github.com/alibaba/nacos/blob/develop/distribution/conf/nacos-mysql.sql</a></p><h2 id="创建nacos容器"><a href="#创建nacos容器" class="headerlink" title="创建nacos容器"></a>创建nacos容器</h2><pre><code class="hljs">docker run -d -p 8848:8848  \-e MODE=standalone \</code></pre><h1 id="e-PREFER-HOST-MODE-x3D-hostname"><a href="#e-PREFER-HOST-MODE-x3D-hostname" class="headerlink" title="-e PREFER_HOST_MODE&#x3D;hostname \"></a>-e PREFER_HOST_MODE&#x3D;hostname \</h1><pre><code class="hljs">-e SPRING_DATASOURCE_PLATFORM=mysql \-e MYSQL_SERVICE_HOST=127.0.0.1 \-e MYSQL_SERVICE_PORT=3306 \-e MYSQL_SERVICE_DB_NAME=nacos_config \-e MYSQL_SERVICE_USER=root \-e MYSQL_SERVICE_PASSWORD=root \-e MYSQL_DATABASE_NUM=1 \-v /root/nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties \-v /root/nacos/logs:/home/nacos/logs \--restart always --name nacos-test nacos/nacos-server</code></pre><h2 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h2><pre><code class="hljs">docker start nacos-test</code></pre><h3 id="访问http-localhost-8848-nacos-账号默认nacos、密码默认nacos"><a href="#访问http-localhost-8848-nacos-账号默认nacos、密码默认nacos" class="headerlink" title="访问http://localhost:8848/nacos/ 账号默认nacos、密码默认nacos"></a>访问<a href="http://localhost:8848/nacos/">http://localhost:8848/nacos/</a> 账号默认nacos、密码默认nacos</h3><p>新建配置文件(txt)<br>hello_nacos.png</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>nacos</category>
       
     </categories>
     
