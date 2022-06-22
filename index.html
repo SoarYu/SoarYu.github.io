@@ -17,16 +17,16 @@
   <meta name="keywords" content="">
   
     <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:title" content="Soar&#39;s Blog">
+<meta property="og:url" content="https://soaryu.github.io/index.html">
+<meta property="og:site_name" content="Soar&#39;s Blog">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Soar Yu">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Hexo</title>
+  <title>Soar&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -58,7 +58,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"soaryu.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -84,7 +84,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>Soar</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -173,7 +173,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Welcome!Best Wishes from Yu!"></span>
+            <span id="subtitle" data-typed-text="Welcome! Best wishes for you!"></span>
           
         </div>
 
@@ -212,14 +212,14 @@
       <h1 class="index-header">
         
         <a href="/2022/06/21/nacos-coredns-plugin/" target="_self">
-          nacos-coredns-plugin
+          linux部署nacos-coredns-plugin
         </a>
       </h1>
 
       
       <a class="index-excerpt index-excerpt__noimg" href="/2022/06/21/nacos-coredns-plugin/" target="_self">
         <div>
-          nacos-coredns-plugin部署原来nacos-coredns-plugin的master分支使用的是 coredns v1.2.6 版本，里面的依赖由于时间太久没有更新，导致导入的时候会报错，所以我们需要更新到v1.6.7的版本。 切换v1.6.7分支1234git clone https:&#x2F;&#x2F;github.com&#x2F;nacos-group&#x2F;nacos-coredns-plugin.g
+          nacos-coredns-plugin部署目前nacos-coredns-plugin的master分支使用的是 coredns v1.2.6 版本，里面的依赖由于时间太久没有更新，导入的时候会报错，所以需要切换到v1.6.7的分支。 coredns v1.6.7支持golang1.13的module功能，可以更好地管理项目依赖的导入。 1.切换v1.6.7分支12345cd $GOPATH&#x2F;s
         </div>
       </a>
 
@@ -265,8 +265,62 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2022/06/21/nacos-docker/" target="_self">
+          nacos-docker部署
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/06/21/nacos-docker/" target="_self">
+        <div>
+          docker 官方拉取docker pull nacos&#x2F;nacos-server:latest  创建本地的映射文件，custom.properties，mkdir -p &#x2F;root&#x2F;nacos&#x2F;init.d &#x2F;root&#x2F;nacos&#x2F;logs touch &#x2F;root&#x2F;nacos&#x2F;init.d&#x2F;custom.properties  在文件中写入以下配置management.endpoints.
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-06-21 15:21" pubdate>
+              2022-06-21
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/nacos/" class="category-chain-item">nacos</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2022/06/21/hello-world/" target="_self">
-          Hello World
+          About Hexo
         </a>
       </h1>
 
@@ -298,60 +352,6 @@
       <span class="category-chain">
         
   <a href="/categories/Hexo/" class="category-chain-item">Hexo</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2022/06/21/nacos-docker/" target="_self">
-          nacos-docker
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/06/21/nacos-docker/" target="_self">
-        <div>
-          git拉取nacos-docker2.1.0版本git clone https:&#x2F;&#x2F;github.com&#x2F;nacos-group&#x2F;nacos-docker.gitcd nacos-dockergit checkout -b v2.1.0 v2.1.0 docker 官方拉取docker pull nacos&#x2F;nacos-server:latest  创建本地的映射文件，custom.propert
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-06-21 15:21" pubdate>
-              2022-06-21
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/nacos/" class="category-chain-item">nacos</a>
   
   
 
