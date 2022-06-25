@@ -16,23 +16,25 @@
   <meta name="author" content="Soar Yu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="docker 官方拉取1docker pull nacos&#x2F;nacos-server:latest 创建本地的映射文件，custom.properties12mkdir -p &#x2F;root&#x2F;nacos&#x2F;init.d &#x2F;root&#x2F;nacos&#x2F;logstouch &#x2F;root&#x2F;nacos&#x2F;init.d&#x2F;custom.properties 在文件中写入以下配置1management.endpoints.">
+    <meta name="description" content="docker 安装1apt install docker.io  docker 拉取mysql官方镜像1docker pull mysql:8.0.18  查看本地镜像使用以下命令来查看是否已安装了 mysql： 1docker images 在上图中可以看到我们已经安装了8.0.18版本的 mysql 镜像。 运行容器安装完成后，我们可以使用以下命令来运行 mysql 容器： 1docker r">
 <meta property="og:type" content="article">
-<meta property="og:title" content="nacos-docker部署">
-<meta property="og:url" content="https://soaryu.github.io/2022/06/21/nacos-docker/index.html">
+<meta property="og:title" content="mysql-docker部署">
+<meta property="og:url" content="https://soaryu.github.io/2022/06/25/docker-mysql/index.html">
 <meta property="og:site_name" content="Soar爱我了吧">
-<meta property="og:description" content="docker 官方拉取1docker pull nacos&#x2F;nacos-server:latest 创建本地的映射文件，custom.properties12mkdir -p &#x2F;root&#x2F;nacos&#x2F;init.d &#x2F;root&#x2F;nacos&#x2F;logstouch &#x2F;root&#x2F;nacos&#x2F;init.d&#x2F;custom.properties 在文件中写入以下配置1management.endpoints.">
+<meta property="og:description" content="docker 安装1apt install docker.io  docker 拉取mysql官方镜像1docker pull mysql:8.0.18  查看本地镜像使用以下命令来查看是否已安装了 mysql： 1docker images 在上图中可以看到我们已经安装了8.0.18版本的 mysql 镜像。 运行容器安装完成后，我们可以使用以下命令来运行 mysql 容器： 1docker r">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://soaryu.github.io/img/hello_nacos.png">
-<meta property="article:published_time" content="2022-06-21T07:21:43.000Z">
-<meta property="article:modified_time" content="2022-06-22T07:23:34.533Z">
+<meta property="og:image" content="https://soaryu.github.io/img/docker-pull-mysql.png">
+<meta property="og:image" content="https://soaryu.github.io/img/docker-mysql-images.png">
+<meta property="og:image" content="https://soaryu.github.io/img/docker-ps-mysql.png">
+<meta property="article:published_time" content="2022-06-25T12:32:43.000Z">
+<meta property="article:modified_time" content="2022-06-25T12:37:50.947Z">
 <meta property="article:author" content="Soar Yu">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://soaryu.github.io/img/hello_nacos.png">
+<meta name="twitter:image" content="https://soaryu.github.io/img/docker-pull-mysql.png">
   
   
   
-  <title>nacos-docker部署 - Soar爱我了吧</title>
+  <title>mysql-docker部署 - Soar爱我了吧</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -185,7 +187,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="nacos-docker部署"></span>
+            <span id="subtitle" data-typed-text="mysql-docker部署"></span>
           
         </div>
 
@@ -196,8 +198,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-21 15:21" pubdate>
-          2022年6月21日 下午
+        <time datetime="2022-06-25 20:32" pubdate>
+          2022年6月25日 晚上
         </time>
       </span>
     
@@ -208,7 +210,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          858 字
+          431 字
         
       </span>
     
@@ -219,7 +221,7 @@
         
         
         
-          8 分钟
+          4 分钟
         
       </span>
     
@@ -257,25 +259,24 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">nacos-docker部署</h1>
+            <h1 style="display: none">mysql-docker部署</h1>
             
             
               <div class="markdown-body">
                 
-                <!-- ## git拉取nacos-docker2.1.0版本
+                <h2 id="docker-安装"><a href="#docker-安装" class="headerlink" title="docker 安装"></a>docker 安装</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">apt <span class="hljs-keyword">install</span> docker.io<br></code></pre></td></tr></table></figure>
 
-git clone https://github.com/nacos-group/nacos-docker.git
-cd nacos-docker
-git checkout -b v2.1.0 v2.1.0 -->
-
-<h2 id="docker-官方拉取"><a href="#docker-官方拉取" class="headerlink" title="docker 官方拉取"></a>docker 官方拉取</h2><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs axapta">docker pull nacos/nacos-<span class="hljs-keyword">server</span>:latest<br></code></pre></td></tr></table></figure>
-<h3 id="创建本地的映射文件，custom-properties"><a href="#创建本地的映射文件，custom-properties" class="headerlink" title="创建本地的映射文件，custom.properties"></a>创建本地的映射文件，custom.properties</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">mkdir -p <span class="hljs-regexp">/root/</span>nacos<span class="hljs-regexp">/init.d /</span>root<span class="hljs-regexp">/nacos/</span>logs<br>touch <span class="hljs-regexp">/root/</span>nacos<span class="hljs-regexp">/init.d/</span>custom.properties<br></code></pre></td></tr></table></figure>
-<h3 id="在文件中写入以下配置"><a href="#在文件中写入以下配置" class="headerlink" title="在文件中写入以下配置"></a>在文件中写入以下配置</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">management<span class="hljs-selector-class">.endpoints</span><span class="hljs-selector-class">.web</span><span class="hljs-selector-class">.exposure</span>.include=*<br></code></pre></td></tr></table></figure>
-
-<h2 id="初始化-mysql-数据库"><a href="#初始化-mysql-数据库" class="headerlink" title="初始化 mysql 数据库"></a>初始化 mysql 数据库</h2><p>从以下链接获取sql脚本：<a target="_blank" rel="noopener" href="https://github.com/alibaba/nacos/blob/develop/distribution/conf/nacos-mysql.sql">https://github.com/alibaba/nacos/blob/develop/distribution/conf/nacos-mysql.sql</a></p>
-<h2 id="创建nacos容器-单例模式"><a href="#创建nacos容器-单例模式" class="headerlink" title="创建nacos容器(单例模式)"></a>创建nacos容器(单例模式)</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs routeros">docker <span class="hljs-built_in">run</span> -d -p 8848:8848  \<br>-e <span class="hljs-attribute">MODE</span>=standalone \<br>-e <span class="hljs-attribute">PREFER_HOST_MODE</span>=hostname \ <br>-e <span class="hljs-attribute">SPRING_DATASOURCE_PLATFORM</span>=mysql \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_HOST</span>=127.0.0.1 \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_PORT</span>=3306 \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_DB_NAME</span>=nacos_config \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_USER</span>=root \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_PASSWORD</span>=root \<br>-e <span class="hljs-attribute">MYSQL_DATABASE_NUM</span>=1 \<br>-v /root/nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties \<br>-v /root/nacos/logs:/home/nacos/logs \<br>--restart always --name nacos nacos/nacos-server<br></code></pre></td></tr></table></figure>
-<h2 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">docker <span class="hljs-literal">start</span> nacos<br></code></pre></td></tr></table></figure>
-<h3 id="访问http-localhost-8848-nacos-账号默认nacos、密码默认nacos"><a href="#访问http-localhost-8848-nacos-账号默认nacos、密码默认nacos" class="headerlink" title="访问http://localhost:8848/nacos/ 账号默认nacos、密码默认nacos"></a>访问<a target="_blank" rel="noopener" href="http://localhost:8848/nacos/">http://localhost:8848/nacos/</a> 账号默认nacos、密码默认nacos</h3><p>新建txt配置文件<br><img src="/img/hello_nacos.png" srcset="/img/loading.gif" lazyload alt="hello_nacos"></p>
+<h2 id="docker-拉取mysql官方镜像"><a href="#docker-拉取mysql官方镜像" class="headerlink" title="docker 拉取mysql官方镜像"></a>docker 拉取mysql官方镜像</h2><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">docker</span> pull mysql:<span class="hljs-number">8</span>.<span class="hljs-number">0</span>.<span class="hljs-number">18</span><br></code></pre></td></tr></table></figure>
+<p><img src="/img/docker-pull-mysql.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="查看本地镜像"><a href="#查看本地镜像" class="headerlink" title="查看本地镜像"></a>查看本地镜像</h2><p><strong>使用以下命令来查看是否已安装了 mysql：</strong></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">docker images</span><br></code></pre></td></tr></table></figure>
+<p><img src="/img/docker-mysql-images.png" srcset="/img/loading.gif" lazyload><br><strong>在上图中可以看到我们已经安装了8.0.18版本的 mysql 镜像。</strong></p>
+<h2 id="运行容器"><a href="#运行容器" class="headerlink" title="运行容器"></a>运行容器</h2><p><strong>安装完成后，我们可以使用以下命令来运行 mysql 容器：</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">docker</span> run -itd --name mysql-test -p <span class="hljs-number">3306</span>:<span class="hljs-number">3306</span> -e MYSQL_ROOT_PASSWORD=<span class="hljs-number">123456</span> mysql:<span class="hljs-number">8</span>.<span class="hljs-number">0</span>.<span class="hljs-number">18</span><br></code></pre></td></tr></table></figure>
+<p>参数说明：<br>-p 3306:3306 ：映射容器服务的 3306 端口到宿主机的 3306 端口，外部主机可以直接通过 宿主机ip:3306 访问到 MySQL 的服务。<br>MYSQL_ROOT_PASSWORD&#x3D;123456：设置 MySQL 服务 root 用户的密码。</p>
+<h2 id="安装成功"><a href="#安装成功" class="headerlink" title="安装成功"></a>安装成功</h2><p>通过 docker ps 命令查看是否安装成功：</p>
+<p>本机可以通过 root 和密码 123456 访问 MySQL 服务。</p>
+<p><img src="/img/docker-ps-mysql.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>
@@ -314,8 +315,8 @@ git checkout -b v2.1.0 v2.1.0 -->
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>nacos-docker部署</div>
-      <div>https://soaryu.github.io/2022/06/21/nacos-docker/</div>
+      <div>mysql-docker部署</div>
+      <div>https://soaryu.github.io/2022/06/25/docker-mysql/</div>
     </div>
     <div class="license-meta">
       
@@ -327,7 +328,7 @@ git checkout -b v2.1.0 v2.1.0 -->
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年6月21日</div>
+          <div>2022年6月25日</div>
         </div>
       
       
@@ -357,18 +358,12 @@ git checkout -b v2.1.0 v2.1.0 -->
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/06/21/nacos-coredns-plugin/" title="linux部署nacos-coredns-plugin">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">linux部署nacos-coredns-plugin</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/06/21/hello-world/" title="About Hexo">
-                        <span class="hidden-mobile">About Hexo</span>
+                      <a href="/2022/06/25/hexo-bt-tcCloud/" title="Hexo部署到腾讯云（Ubuntu 20.04）">
+                        <span class="hidden-mobile">Hexo部署到腾讯云（Ubuntu 20.04）</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
