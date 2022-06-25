@@ -23,10 +23,14 @@
 <meta property="og:site_name" content="Soar爱我了吧">
 <meta property="og:description" content="Hexo部署到腾讯云git配置创建一个名为blog的用户，用于管理Hexo项目 1adduser blog  给blog用户添加文件的写权限1234vim &#x2F;etc&#x2F;sudoers#找到User privilege specification部分，添加如下内容：blog    ALL&#x3D;(ALL:ALL) AL  切换至blog用户1su blog 退回到根路径（cd &#x2F;），在&#x2F;">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://soaryu.github.io/img/add-blog-su.png">
+<meta property="og:image" content="https://soaryu.github.io/img/init-hexo-git.png">
+<meta property="og:image" content="https://soaryu.github.io/img/change-nginx-server.png">
 <meta property="article:published_time" content="2022-06-25T08:07:00.000Z">
-<meta property="article:modified_time" content="2022-06-25T12:11:26.455Z">
+<meta property="article:modified_time" content="2022-06-25T12:17:16.315Z">
 <meta property="article:author" content="Soar Yu">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://soaryu.github.io/img/add-blog-su.png">
   
   
   
@@ -206,7 +210,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          2.1k 字
         
       </span>
     
@@ -217,7 +221,7 @@
         
         
         
-          11 分钟
+          18 分钟
         
       </span>
     
@@ -264,11 +268,11 @@
 <figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">adduser blog</span><br></code></pre></td></tr></table></figure>
 
 <h3 id="给blog用户添加文件的写权限"><a href="#给blog用户添加文件的写权限" class="headerlink" title="给blog用户添加文件的写权限"></a>给blog用户添加文件的写权限</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">vim</span> /etc/sudoers<br><br><span class="hljs-comment">#找到User privilege specification部分，添加如下内容：</span><br><span class="hljs-attribute">blog</span>    <span class="hljs-literal">ALL</span>=(<span class="hljs-literal">ALL</span>:<span class="hljs-literal">ALL</span>) AL<br></code></pre></td></tr></table></figure>
-<p><a href="/img/add-blog-su.png"></a></p>
+<p><img src="/img/add-blog-su.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="切换至blog用户"><a href="#切换至blog用户" class="headerlink" title="切换至blog用户"></a>切换至blog用户</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">su blog</span><br></code></pre></td></tr></table></figure>
 <p><strong>退回到根路径（cd &#x2F;），在&#x2F;var&#x2F;repo下创建名为hexo_static的裸仓库</strong></p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs awk">sudo mkdir <span class="hljs-regexp">/var/</span>repo/<br>sudo chown -R <span class="hljs-variable">$USER</span>:<span class="hljs-variable">$USER</span> <span class="hljs-regexp">/var/</span>repo/<br>sudo chmod -R <span class="hljs-number">755</span> <span class="hljs-regexp">/var/</span>repo/<br><br>cd <span class="hljs-regexp">/var/</span>repo/<br>git init --bare hexo_static.git<br></code></pre></td></tr></table></figure>
-<p><a href="/img/init-hexo-git.png"></a></p>
+<p><img src="/img/init-hexo-git.png" srcset="/img/loading.gif" lazyload></p>
 <h2 id="创建Git钩子"><a href="#创建Git钩子" class="headerlink" title="创建Git钩子"></a>创建Git钩子</h2><p><strong>在之前创建的hexo_static裸仓库下有一个hooks文件夹，在其中创建一个名为post-receive的钩子文件：</strong></p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">vim <span class="hljs-regexp">/var/</span>repo<span class="hljs-regexp">/hexo_static.git/</span>hooks/post-receive<br></code></pre></td></tr></table></figure>
 <p><strong>在其中写入如下内容：</strong></p>
@@ -281,7 +285,7 @@
 <h3 id="创建-x2F-var-x2F-www-x2F-hexo目录，用于Nginx托管，修改目录所有权和权限"><a href="#创建-x2F-var-x2F-www-x2F-hexo目录，用于Nginx托管，修改目录所有权和权限" class="headerlink" title="创建&#x2F;var&#x2F;www&#x2F;hexo目录，用于Nginx托管，修改目录所有权和权限"></a>创建&#x2F;var&#x2F;www&#x2F;hexo目录，用于Nginx托管，修改目录所有权和权限</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">sudo mkdir -p <span class="hljs-regexp">/var/</span>www/hexo<br>sudo chown -R <span class="hljs-variable">$USER</span>:<span class="hljs-variable">$USER</span> <span class="hljs-regexp">/var/</span>www/hexo<br>sudo chmod -R <span class="hljs-number">755</span> <span class="hljs-regexp">/var/</span>www/hexo<br></code></pre></td></tr></table></figure>
 
 <h3 id="使用vim修改-x2F-etc-x2F-nginx-x2F-sites-enabled-x2F-default，使root指向hexo目录"><a href="#使用vim修改-x2F-etc-x2F-nginx-x2F-sites-enabled-x2F-default，使root指向hexo目录" class="headerlink" title="使用vim修改&#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;default，使root指向hexo目录"></a>使用vim修改&#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;default，使root指向hexo目录</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs gradle">sudo vim <span class="hljs-regexp">/etc/</span>nginx<span class="hljs-regexp">/sites-enabled/</span><span class="hljs-keyword">default</span><br>复制<br>找到server部分，修改如下内容<br><br>root <span class="hljs-regexp">/var/</span>www/hexo;<br></code></pre></td></tr></table></figure>
-<p><a href="/img/change-nginx-server.png"></a></p>
+<p><img src="/img/change-nginx-server.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="重启Nginx服务，使得改动生效"><a href="#重启Nginx服务，使得改动生效" class="headerlink" title="重启Nginx服务，使得改动生效"></a>重启Nginx服务，使得改动生效</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">sudo service nginx restart</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="本地搭建hexo客户端（Windows）"><a href="#本地搭建hexo客户端（Windows）" class="headerlink" title="本地搭建hexo客户端（Windows）"></a>本地搭建hexo客户端（Windows）</h2><ul>
@@ -293,6 +297,11 @@
 <figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs elixir"><span class="hljs-symbol">deploy:</span><br>  <span class="hljs-symbol">type:</span> git<br>  <span class="hljs-symbol">repo:</span> blog<span class="hljs-variable">@server_ip</span><span class="hljs-symbol">:/var/repo/hexo_static</span>.git<br>  <span class="hljs-symbol">branch:</span> master<br></code></pre></td></tr></table></figure>
 <p>执行命令部署Hexo项目</p>
 <figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">hexo cleam</span><br><span class="hljs-attribute">hexo g</span><br><span class="hljs-attribute">hexo d</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>进入目录var&#x2F;www&#x2F;hexo&#x2F;下，可以看到静态文件已全部上传</strong></p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs tap">root@VM-8-16-ubuntu:/var/www/hexo<span class="hljs-comment"># ll</span><br>total 96<br>drwxr-xr-x<span class="hljs-number"> 12 </span>blog blog <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:59 ./<br>drwxr-xr-x <span class="hljs-number"> 4 </span>root root <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:52 ../<br>drwxrwxr-x <span class="hljs-number"> 3 </span>blog blog <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:59 2022/<br>-rw-rw-r-- <span class="hljs-number"> 1 </span>blog blog <span class="hljs-number"> 9178 </span>Jun<span class="hljs-number"> 25 </span>19:59 404.html<br>drwxrwxr-x <span class="hljs-number"> 2 </span>blog blog <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:59 about/<br>drwxrwxr-x <span class="hljs-number"> 3 </span>blog blog <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:59 archives/<br>drwxrwxr-x <span class="hljs-number"> 4 </span>blog blog <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:59 categories/<br>drwxrwxr-x <span class="hljs-number"> 2 </span>blog blog <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:59 css/<br>drwxrwxr-x <span class="hljs-number"> 2 </span>blog blog <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:59 img/<br>-rw-rw-r-- <span class="hljs-number"> 1 </span>blog blog<span class="hljs-number"> 15098 </span>Jun<span class="hljs-number"> 25 </span>19:59 index.html<br>drwxrwxr-x <span class="hljs-number"> 2 </span>blog blog <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:59 js/<br>drwxrwxr-x <span class="hljs-number"> 2 </span>blog blog <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:59 links/<br>-rw-rw-r-- <span class="hljs-number"> 1 </span>blog blog<span class="hljs-number"> 20259 </span>Jun<span class="hljs-number"> 25 </span>19:59 local-search.xml<br>drwxrwxr-x <span class="hljs-number"> 2 </span>blog blog <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:59 tags/<br>drwxrwxr-x <span class="hljs-number"> 2 </span>blog blog <span class="hljs-number"> 4096 </span>Jun<span class="hljs-number"> 25 </span>19:59 xml/<br></code></pre></td></tr></table></figure>
+<p>访问测试<br>打开浏览器，输入Ubuntu服务器的IP地址，就可以看到博客页面啦</p>
+
                 
               </div>
             
