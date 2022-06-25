@@ -16,21 +16,21 @@
   <meta name="author" content="Soar Yu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Hexo部署到腾讯云git配置创建一个名为blog的用户，用于管理Hexo项目1adduser blog  给blog用户添加文件的写权限1234vim &#x2F;etc&#x2F;sudoers#找到User privilege specification部分，添加如下内容：blog    ALL&#x3D;(ALL:ALL) AL  切换至blog用户1su blog 退回到根路径（cd &#x2F;），在&#x2F;v">
+    <meta name="description" content="Hexo部署到腾讯云git配置创建一个名为blog的用户，用于管理Hexo项目 1adduser blog  给blog用户添加文件的写权限1234vim &#x2F;etc&#x2F;sudoers#找到User privilege specification部分，添加如下内容：blog    ALL&#x3D;(ALL:ALL) AL  切换至blog用户1su blog 退回到根路径（cd &#x2F;），在&#x2F;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo部署到腾讯云">
+<meta property="og:title" content="Hexo部署到腾讯云（Ubuntu 20.04）">
 <meta property="og:url" content="https://soaryu.github.io/2022/06/25/hexo-bt-tcCloud/index.html">
 <meta property="og:site_name" content="Soar&#39;s Blog">
-<meta property="og:description" content="Hexo部署到腾讯云git配置创建一个名为blog的用户，用于管理Hexo项目1adduser blog  给blog用户添加文件的写权限1234vim &#x2F;etc&#x2F;sudoers#找到User privilege specification部分，添加如下内容：blog    ALL&#x3D;(ALL:ALL) AL  切换至blog用户1su blog 退回到根路径（cd &#x2F;），在&#x2F;v">
+<meta property="og:description" content="Hexo部署到腾讯云git配置创建一个名为blog的用户，用于管理Hexo项目 1adduser blog  给blog用户添加文件的写权限1234vim &#x2F;etc&#x2F;sudoers#找到User privilege specification部分，添加如下内容：blog    ALL&#x3D;(ALL:ALL) AL  切换至blog用户1su blog 退回到根路径（cd &#x2F;），在&#x2F;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-06-25T08:07:00.000Z">
-<meta property="article:modified_time" content="2022-06-25T11:56:00.920Z">
+<meta property="article:modified_time" content="2022-06-25T12:11:26.455Z">
 <meta property="article:author" content="Soar Yu">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Hexo部署到腾讯云 - Soar&#39;s Blog</title>
+  <title>Hexo部署到腾讯云（Ubuntu 20.04） - Soar&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -183,7 +183,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Hexo部署到腾讯云"></span>
+            <span id="subtitle" data-typed-text="Hexo部署到腾讯云（Ubuntu 20.04）"></span>
           
         </div>
 
@@ -206,7 +206,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          677 字
+          1.3k 字
         
       </span>
     
@@ -217,7 +217,7 @@
         
         
         
-          6 分钟
+          11 分钟
         
       </span>
     
@@ -255,12 +255,13 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Hexo部署到腾讯云</h1>
+            <h1 style="display: none">Hexo部署到腾讯云（Ubuntu 20.04）</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Hexo部署到腾讯云"><a href="#Hexo部署到腾讯云" class="headerlink" title="Hexo部署到腾讯云"></a>Hexo部署到腾讯云</h1><h2 id="git配置"><a href="#git配置" class="headerlink" title="git配置"></a>git配置</h2><h3 id="创建一个名为blog的用户，用于管理Hexo项目"><a href="#创建一个名为blog的用户，用于管理Hexo项目" class="headerlink" title="创建一个名为blog的用户，用于管理Hexo项目"></a>创建一个名为blog的用户，用于管理Hexo项目</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">adduser blog</span><br></code></pre></td></tr></table></figure>
+                <h1 id="Hexo部署到腾讯云"><a href="#Hexo部署到腾讯云" class="headerlink" title="Hexo部署到腾讯云"></a>Hexo部署到腾讯云</h1><h2 id="git配置"><a href="#git配置" class="headerlink" title="git配置"></a>git配置</h2><p><strong>创建一个名为blog的用户，用于管理Hexo项目</strong></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">adduser blog</span><br></code></pre></td></tr></table></figure>
 
 <h3 id="给blog用户添加文件的写权限"><a href="#给blog用户添加文件的写权限" class="headerlink" title="给blog用户添加文件的写权限"></a>给blog用户添加文件的写权限</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">vim</span> /etc/sudoers<br><br><span class="hljs-comment">#找到User privilege specification部分，添加如下内容：</span><br><span class="hljs-attribute">blog</span>    <span class="hljs-literal">ALL</span>=(<span class="hljs-literal">ALL</span>:<span class="hljs-literal">ALL</span>) AL<br></code></pre></td></tr></table></figure>
 <p><a href="/img/add-blog-su.png"></a></p>
@@ -268,16 +269,30 @@
 <p><strong>退回到根路径（cd &#x2F;），在&#x2F;var&#x2F;repo下创建名为hexo_static的裸仓库</strong></p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs awk">sudo mkdir <span class="hljs-regexp">/var/</span>repo/<br>sudo chown -R <span class="hljs-variable">$USER</span>:<span class="hljs-variable">$USER</span> <span class="hljs-regexp">/var/</span>repo/<br>sudo chmod -R <span class="hljs-number">755</span> <span class="hljs-regexp">/var/</span>repo/<br><br>cd <span class="hljs-regexp">/var/</span>repo/<br>git init --bare hexo_static.git<br></code></pre></td></tr></table></figure>
 <p><a href="/img/init-hexo-git.png"></a></p>
-<h2 id="nginx-配置"><a href="#nginx-配置" class="headerlink" title="nginx 配置"></a>nginx 配置</h2><p>首先安装Nginx</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install nginx -y<br></code></pre></td></tr></table></figure>
+<h2 id="创建Git钩子"><a href="#创建Git钩子" class="headerlink" title="创建Git钩子"></a>创建Git钩子</h2><p><strong>在之前创建的hexo_static裸仓库下有一个hooks文件夹，在其中创建一个名为post-receive的钩子文件：</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">vim <span class="hljs-regexp">/var/</span>repo<span class="hljs-regexp">/hexo_static.git/</span>hooks/post-receive<br></code></pre></td></tr></table></figure>
+<p><strong>在其中写入如下内容：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br>git --work-tree=/var/www/hexo --git-dir=/var/repo/hexo_static.git checkout -f<br></code></pre></td></tr></table></figure>
+<p><strong>让该文件变为可执行文件</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">chmod +x <span class="hljs-regexp">/var/</span>repo<span class="hljs-regexp">/hexo_static.git/</span>hooks/post-receive<br></code></pre></td></tr></table></figure>
 
-<p>创建&#x2F;var&#x2F;www&#x2F;hexo目录，用于Nginx托管，修改目录所有权和权限</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">sudo mkdir -p <span class="hljs-regexp">/var/</span>www/hexo<br>sudo chown -R <span class="hljs-variable">$USER</span>:<span class="hljs-variable">$USER</span> <span class="hljs-regexp">/var/</span>www/hexo<br>sudo chmod -R <span class="hljs-number">755</span> <span class="hljs-regexp">/var/</span>www/hexo<br></code></pre></td></tr></table></figure>
+<h2 id="nginx-配置"><a href="#nginx-配置" class="headerlink" title="nginx 配置"></a>nginx 配置</h2><h3 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install nginx -y<br></code></pre></td></tr></table></figure>
 
-<p>3.使用vim修改&#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;default，使root指向hexo目录</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs gradle">sudo vim <span class="hljs-regexp">/etc/</span>nginx<span class="hljs-regexp">/sites-enabled/</span><span class="hljs-keyword">default</span><br>复制<br>找到server部分，修改如下内容<br><br>root <span class="hljs-regexp">/var/</span>www/hexo;<br></code></pre></td></tr></table></figure>
+<h3 id="创建-x2F-var-x2F-www-x2F-hexo目录，用于Nginx托管，修改目录所有权和权限"><a href="#创建-x2F-var-x2F-www-x2F-hexo目录，用于Nginx托管，修改目录所有权和权限" class="headerlink" title="创建&#x2F;var&#x2F;www&#x2F;hexo目录，用于Nginx托管，修改目录所有权和权限"></a>创建&#x2F;var&#x2F;www&#x2F;hexo目录，用于Nginx托管，修改目录所有权和权限</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">sudo mkdir -p <span class="hljs-regexp">/var/</span>www/hexo<br>sudo chown -R <span class="hljs-variable">$USER</span>:<span class="hljs-variable">$USER</span> <span class="hljs-regexp">/var/</span>www/hexo<br>sudo chmod -R <span class="hljs-number">755</span> <span class="hljs-regexp">/var/</span>www/hexo<br></code></pre></td></tr></table></figure>
+
+<h3 id="使用vim修改-x2F-etc-x2F-nginx-x2F-sites-enabled-x2F-default，使root指向hexo目录"><a href="#使用vim修改-x2F-etc-x2F-nginx-x2F-sites-enabled-x2F-default，使root指向hexo目录" class="headerlink" title="使用vim修改&#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;default，使root指向hexo目录"></a>使用vim修改&#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;default，使root指向hexo目录</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs gradle">sudo vim <span class="hljs-regexp">/etc/</span>nginx<span class="hljs-regexp">/sites-enabled/</span><span class="hljs-keyword">default</span><br>复制<br>找到server部分，修改如下内容<br><br>root <span class="hljs-regexp">/var/</span>www/hexo;<br></code></pre></td></tr></table></figure>
 <p><a href="/img/change-nginx-server.png"></a></p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+<h3 id="重启Nginx服务，使得改动生效"><a href="#重启Nginx服务，使得改动生效" class="headerlink" title="重启Nginx服务，使得改动生效"></a>重启Nginx服务，使得改动生效</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">sudo service nginx restart</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="本地搭建hexo客户端（Windows）"><a href="#本地搭建hexo客户端（Windows）" class="headerlink" title="本地搭建hexo客户端（Windows）"></a>本地搭建hexo客户端（Windows）</h2><ul>
+<li>首先安装git，这里不再过多赘述</li>
+<li>使用命令ssh-keygen -t rsa在windons用户下&#x2F;.ssh文件夹中生成密钥</li>
+<li>将生成的公钥 .pub 文件内容拷贝到ubuntu服务器的&#x2F;home&#x2F;blog&#x2F;.ssh&#x2F;authorized_keys上</li>
+</ul>
+<h3 id="部署Hexo项目"><a href="#部署Hexo项目" class="headerlink" title="部署Hexo项目"></a>部署Hexo项目</h3><p>编辑hexo的config.yml文件，在deploy处修改repo项：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs elixir"><span class="hljs-symbol">deploy:</span><br>  <span class="hljs-symbol">type:</span> git<br>  <span class="hljs-symbol">repo:</span> blog<span class="hljs-variable">@server_ip</span><span class="hljs-symbol">:/var/repo/hexo_static</span>.git<br>  <span class="hljs-symbol">branch:</span> master<br></code></pre></td></tr></table></figure>
+<p>执行命令部署Hexo项目</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">hexo cleam</span><br><span class="hljs-attribute">hexo g</span><br><span class="hljs-attribute">hexo d</span><br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -315,7 +330,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Hexo部署到腾讯云</div>
+      <div>Hexo部署到腾讯云（Ubuntu 20.04）</div>
       <div>https://soaryu.github.io/2022/06/25/hexo-bt-tcCloud/</div>
     </div>
     <div class="license-meta">
