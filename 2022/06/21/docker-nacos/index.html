@@ -16,16 +16,16 @@
   <meta name="author" content="Soar Yu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="docker 安装1apt-get install docker docker 官方拉取1docker pull nacos&#x2F;nacos-server:latest 创建本地的映射文件，custom.properties12mkdir -p &#x2F;root&#x2F;nacos&#x2F;init.d &#x2F;root&#x2F;nacos&#x2F;logstouch &#x2F;root&#x2F;nacos&#x2F;init.d&#x2F;custom.properties">
+    <meta name="description" content="docker 安装1apt install docker.io  docker 官方拉取1docker pull nacos&#x2F;nacos-server:latest 创建本地的映射文件，custom.properties12mkdir -p &#x2F;root&#x2F;nacos&#x2F;init.d &#x2F;root&#x2F;nacos&#x2F;logstouch &#x2F;root&#x2F;nacos&#x2F;init.d&#x2F;custom.properties">
 <meta property="og:type" content="article">
 <meta property="og:title" content="nacos-docker部署">
 <meta property="og:url" content="https://soaryu.github.io/2022/06/21/docker-nacos/index.html">
 <meta property="og:site_name" content="Soar爱我了吧">
-<meta property="og:description" content="docker 安装1apt-get install docker docker 官方拉取1docker pull nacos&#x2F;nacos-server:latest 创建本地的映射文件，custom.properties12mkdir -p &#x2F;root&#x2F;nacos&#x2F;init.d &#x2F;root&#x2F;nacos&#x2F;logstouch &#x2F;root&#x2F;nacos&#x2F;init.d&#x2F;custom.properties">
+<meta property="og:description" content="docker 安装1apt install docker.io  docker 官方拉取1docker pull nacos&#x2F;nacos-server:latest 创建本地的映射文件，custom.properties12mkdir -p &#x2F;root&#x2F;nacos&#x2F;init.d &#x2F;root&#x2F;nacos&#x2F;logstouch &#x2F;root&#x2F;nacos&#x2F;init.d&#x2F;custom.properties">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://soaryu.github.io/img/hello_nacos.png">
 <meta property="article:published_time" content="2022-06-21T07:21:43.000Z">
-<meta property="article:modified_time" content="2022-06-25T12:28:33.733Z">
+<meta property="article:modified_time" content="2022-06-25T12:45:36.061Z">
 <meta property="article:author" content="Soar Yu">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://soaryu.github.io/img/hello_nacos.png">
@@ -70,7 +70,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"soaryu.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"soaryu.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Miw3EQ2W1b0qi92Bbzo2DuIn-gzGzoHsz","app_key":"1QMp9bi4GLgvbO1Twh5p5xLS","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -208,7 +208,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          887 字
+          928 字
         
       </span>
     
@@ -225,6 +225,14 @@
     
 
     
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
     
   </div>
 
@@ -267,13 +275,14 @@
 git clone https://github.com/nacos-group/nacos-docker.git
 cd nacos-docker
 git checkout -b v2.1.0 v2.1.0 -->
-<h2 id="docker-安装"><a href="#docker-安装" class="headerlink" title="docker 安装"></a>docker 安装</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">apt-<span class="hljs-built_in">get</span> install docker<br></code></pre></td></tr></table></figure>
+<h2 id="docker-安装"><a href="#docker-安装" class="headerlink" title="docker 安装"></a>docker 安装</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">apt <span class="hljs-keyword">install</span> docker.io<br></code></pre></td></tr></table></figure>
+
 <h2 id="docker-官方拉取"><a href="#docker-官方拉取" class="headerlink" title="docker 官方拉取"></a>docker 官方拉取</h2><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs axapta">docker pull nacos/nacos-<span class="hljs-keyword">server</span>:latest<br></code></pre></td></tr></table></figure>
 <h3 id="创建本地的映射文件，custom-properties"><a href="#创建本地的映射文件，custom-properties" class="headerlink" title="创建本地的映射文件，custom.properties"></a>创建本地的映射文件，custom.properties</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">mkdir -p <span class="hljs-regexp">/root/</span>nacos<span class="hljs-regexp">/init.d /</span>root<span class="hljs-regexp">/nacos/</span>logs<br>touch <span class="hljs-regexp">/root/</span>nacos<span class="hljs-regexp">/init.d/</span>custom.properties<br></code></pre></td></tr></table></figure>
-<h3 id="在文件中写入以下配置"><a href="#在文件中写入以下配置" class="headerlink" title="在文件中写入以下配置"></a>在文件中写入以下配置</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">management<span class="hljs-selector-class">.endpoints</span><span class="hljs-selector-class">.web</span><span class="hljs-selector-class">.exposure</span>.include=*<br></code></pre></td></tr></table></figure>
+<h3 id="在文件中写入以下配置"><a href="#在文件中写入以下配置" class="headerlink" title="在文件中写入以下配置"></a>在文件中写入以下配置</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gradle">vim <span class="hljs-regexp">/root/</span>nacos<span class="hljs-regexp">/init.d/</span>custom.properties<br>management.endpoints.web.exposure.<span class="hljs-keyword">include</span>=*<br></code></pre></td></tr></table></figure>
 
 <h2 id="初始化-mysql-数据库"><a href="#初始化-mysql-数据库" class="headerlink" title="初始化 mysql 数据库"></a>初始化 mysql 数据库</h2><p>从以下链接获取sql脚本：<a target="_blank" rel="noopener" href="https://github.com/alibaba/nacos/blob/develop/distribution/conf/nacos-mysql.sql">https://github.com/alibaba/nacos/blob/develop/distribution/conf/nacos-mysql.sql</a></p>
-<h2 id="创建nacos容器-单例模式"><a href="#创建nacos容器-单例模式" class="headerlink" title="创建nacos容器(单例模式)"></a>创建nacos容器(单例模式)</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs routeros">docker <span class="hljs-built_in">run</span> -d -p 8848:8848  \<br>-e <span class="hljs-attribute">MODE</span>=standalone \<br>-e <span class="hljs-attribute">PREFER_HOST_MODE</span>=hostname \ <br>-e <span class="hljs-attribute">SPRING_DATASOURCE_PLATFORM</span>=mysql \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_HOST</span>=127.0.0.1 \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_PORT</span>=3306 \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_DB_NAME</span>=nacos_config \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_USER</span>=root \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_PASSWORD</span>=root \<br>-e <span class="hljs-attribute">MYSQL_DATABASE_NUM</span>=1 \<br>-v /root/nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties \<br>-v /root/nacos/logs:/home/nacos/logs \<br>--restart always --name nacos nacos/nacos-server<br></code></pre></td></tr></table></figure>
+<h2 id="创建nacos容器-单例模式"><a href="#创建nacos容器-单例模式" class="headerlink" title="创建nacos容器(单例模式)"></a>创建nacos容器(单例模式)</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs routeros">docker <span class="hljs-built_in">run</span> -d -p 8848:8848  \<br>-e <span class="hljs-attribute">MODE</span>=standalone \<br>-e <span class="hljs-attribute">PREFER_HOST_MODE</span>=hostname \ <br>-e <span class="hljs-attribute">SPRING_DATASOURCE_PLATFORM</span>=mysql \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_HOST</span>=127.0.0.1 \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_PORT</span>=3306 \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_DB_NAME</span>=nacos_config \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_USER</span>=root \<br>-e <span class="hljs-attribute">MYSQL_SERVICE_PASSWORD</span>=123456 \<br>-e <span class="hljs-attribute">MYSQL_DATABASE_NUM</span>=1 \<br>-v /root/nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties \<br>-v /root/nacos/logs:/home/nacos/logs \<br>--restart always --name nacos nacos/nacos-server<br></code></pre></td></tr></table></figure>
 <h2 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">docker <span class="hljs-literal">start</span> nacos<br></code></pre></td></tr></table></figure>
 <h3 id="访问http-localhost-8848-nacos-账号默认nacos、密码默认nacos"><a href="#访问http-localhost-8848-nacos-账号默认nacos、密码默认nacos" class="headerlink" title="访问http://localhost:8848/nacos/ 账号默认nacos、密码默认nacos"></a>访问<a target="_blank" rel="noopener" href="http://localhost:8848/nacos/">http://localhost:8848/nacos/</a> 账号默认nacos、密码默认nacos</h3><p>新建txt配置文件<br><img src="/img/hello_nacos.png" srcset="/img/loading.gif" lazyload alt="hello_nacos"></p>
 
@@ -468,7 +477,7 @@ git checkout -b v2.1.0 v2.1.0 -->
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
     </div>
   
   
@@ -590,6 +599,8 @@ git checkout -b v2.1.0 v2.1.0 -->
   <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
 
 
 
