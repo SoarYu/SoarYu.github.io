@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.soar2568.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文将向你展示：Dockerfile编写，如何构建一个 Go 程序的容器镜像。使用多阶段构建来高效构建小镜像，同时保持 Dockerfile 易于阅读和维护。 使用 Docker Compose 在开发环境中协调多个相关容器的运行。 使用 GitHub Actions 为您的应用程序配置 CI&#x2F;CD 工作流。将容器化 Go 应用程序部署到 Google Cloud、AWS等云服务器平台。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker 创建、测试和部署容器化 Go 应用程序">
+<meta property="og:url" content="http://blog.soar2568.top/2023/06/25/docker-gs-ping/index.html">
+<meta property="og:site_name" content="Soar2568">
+<meta property="og:description" content="本文将向你展示：Dockerfile编写，如何构建一个 Go 程序的容器镜像。使用多阶段构建来高效构建小镜像，同时保持 Dockerfile 易于阅读和维护。 使用 Docker Compose 在开发环境中协调多个相关容器的运行。 使用 GitHub Actions 为您的应用程序配置 CI&#x2F;CD 工作流。将容器化 Go 应用程序部署到 Google Cloud、AWS等云服务器平台。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-06-25T20:32:43.000Z">
+<meta property="article:modified_time" content="2023-07-04T08:16:28.976Z">
+<meta property="article:author" content="SoarYu">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://blog.soar2568.top/2023/06/25/docker-gs-ping/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Docker 创建、测试和部署容器化 Go 应用程序 | Soar2568</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Soar2568</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.soar2568.top/2023/06/25/docker-gs-ping/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="SoarYu">
+      <meta itemprop="description" content="Done is better than perfect!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Soar2568">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Docker 创建、测试和部署容器化 Go 应用程序
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-06-25 20:32:43" itemprop="dateCreated datePublished" datetime="2023-06-25T20:32:43+00:00">2023-06-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-07-04 08:16:28" itemprop="dateModified" datetime="2023-07-04T08:16:28+00:00">2023-07-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">本文将向你展示：Dockerfile编写，如何构建一个 Go 程序的容器镜像。使用多阶段构建来高效构建小镜像，同时保持 Dockerfile 易于阅读和维护。 使用 Docker Compose 在开发环境中协调多个相关容器的运行。 使用 GitHub Actions 为您的应用程序配置 CI/CD 工作流。将容器化 Go 应用程序部署到 Google Cloud、AWS等云服务器平台。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a name="D9h5a"></a></p>
+<h2 id="1-Dockerfile"><a href="#1-Dockerfile" class="headerlink" title="1. Dockerfile"></a>1. Dockerfile</h2><p><a name="Fperl"></a></p>
+<h3 id="1-1-Git-clone-a-application"><a href="#1-1-Git-clone-a-application" class="headerlink" title="1.1 Git clone a application"></a>1.1 Git clone a application</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/olliefr/docker-gs-ping.git</span><br></pre></td></tr></table></figure>
+<p><a name="CBOE0"></a></p>
+<h3 id="1-2-Create-a-Dockerfile"><a href="#1-2-Create-a-Dockerfile" class="headerlink" title="1.2 Create a Dockerfile"></a>1.2 Create a Dockerfile</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># import golang base image</span></span><br><span class="line"><span class="keyword">FROM</span> golang:<span class="number">1.19</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置工作目录,使用 WORKDIR 指令可以来指定工作目录（或者称为当前目录），</span></span><br><span class="line"><span class="comment"># 以后各层的当前目录就被改为指定的目录，如该目录不存在，WORKDIR 会帮你建立目录。</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将项目 modules files 复制进image中 /app/go.mod /app/go.sum</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> go.mod go.sum ./</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 引入程序源码</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> *.go ./</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># RUN 执行命令，下载项目引用的依赖</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> go mod download</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 上一步完成了工具链：编译、链接...，开始编译构建程序的二进制可执行文件</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># CMD tell Docker what command to execute when our image is used to start a container.</span></span><br><span class="line"><span class="comment"># images 加载进 container 时需要执行的操作</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;/docker-ps-ping&quot;</span>]</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><a name="ynkni"></a></p>
+<h3 id="1-3-Create-a-Dockerfile-multistage"><a href="#1-3-Create-a-Dockerfile-multistage" class="headerlink" title="1.3 Create a Dockerfile.multistage"></a>1.3 Create a Dockerfile.multistage</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># import golang base image</span></span><br><span class="line"><span class="keyword">FROM</span> golang:<span class="number">1.19</span> AS build-stage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置工作目录,使用 WORKDIR 指令可以来指定工作目录（或者称为当前目录），</span></span><br><span class="line"><span class="comment"># 以后各层的当前目录就被改为指定的目录，如该目录不存在，WORKDIR 会帮你建立目录。</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将项目 modules files 复制进image中 /app/go.mod /app/go.sum</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> go.mod go.sum ./</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 引入程序源码</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> *.go ./</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># RUN 执行命令，下载项目引用的依赖</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> go mod download</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 上一步完成了工具链：编译、链接...，开始编译构建程序的二进制可执行文件</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># CMD tell Docker what command to execute when our image is used to start a container.</span></span><br><span class="line"><span class="comment"># images 加载进 container 时需要执行的操作</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;/docker-ps-ping&quot;</span>]</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在容器中运行测试用例，Run the tests in the container</span></span><br><span class="line"><span class="keyword">FROM</span> build-stage AS <span class="keyword">run</span><span class="language-bash">-test-stage</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> go <span class="built_in">test</span> -v ./...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个新镜像，只执行二进制程序，，Deploy the application binary into a lean image</span></span><br><span class="line"><span class="keyword">FROM</span> gcr.io/distroless/base-debian11 AS build-release-stage</span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> --from=build-stage /docker-gs-ping /docker-gs-ping</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> nonroot:nonroot</span><br><span class="line"></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;/docker-gs-ping&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+<p>从根本上说, ENTRYPOINT和CMD都是让用户指定一个可执行程序, 这个可执行程序在container启动后自动启动. 实际上, 如果你想让自己制作的镜像自动运行程序(不需要在docker run后面添加命令行指定运行的命令), 你必须在Dockerfile里面, 使用ENTRYPOINT或者CMD命令</p>
+<p>在写Dockerfile时, ENTRYPOINT或者CMD命令会自动覆盖之前的ENTRYPOINT或者CMD命令.<br />在docker镜像运行时, 用户也可以在命令指定具体命令, 覆盖在Dockerfile里的命令.</p>
+<p>比如, 我们写了一个这样的Dockerfile:</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ubuntu:trusty</span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> ping localhost</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看出<strong>ping</strong>命令在docker启动后自己执行, 但是我们可以在命令行启动docker镜像时, 执行其他命令行参数, 覆盖默认的CMD</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker run demo hostname</span><br><span class="line">6c1573c0d4c0</span><br></pre></td></tr></table></figure>
+
+<p>docker启动后, 并没有执行<strong>ping</strong>命令, 而是运行了<strong>hostname</strong>命令<br />和CMD类似, 默认的ENTRYPOINT也在docker run时, 也可以被覆盖. 在运行时, 用–entrypoint覆盖默认的ENTRYPOINT</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --entrypoint hostname demo</span><br><span class="line">075a2fa95ab7</span><br></pre></td></tr></table></figure>
+
+<p>因为CMD命令很容易被docker run命令的方式覆盖, 所以, 如果你希望你的docker镜像的功能足够灵活, 建议在Dockerfile里调用CMD命令. 比如, 你可能有一个通用的Ruby镜像, 这个镜像启动时默认执行irb (<em>CMD irb</em>).<br />相反, ENTRYPOINT的作用不同, 如果你希望你的docker镜像只执行一个具体程序, 不希望用户在执行docker run的时候随意覆盖默认程序. 建议用ENTRYPOINT.</p>
+<p>Docker在很多情况下被用来打包一个程序. 想象你有一个用python脚本实现的程序, 你需要发布这个python程序. 如果用docker打包了这个python程序, 你的最终用户就不需要安装python解释器和python的库依赖. 你可以把所有依赖工具打包进docker镜像里, 然后用ENTRYPOINT指向你的Python脚本本身. 当然你也可以用CMD命令指向Python脚本. 但是通常用ENTRYPOINT可以表明你的docker镜像只是用来执行这个python脚本,也不希望最终用户用这个docker镜像做其他操作.<br><a name="tqJ1e"></a></p>
+<h2 id="2-Docker-build-amp-tag"><a href="#2-Docker-build-amp-tag" class="headerlink" title="2. Docker build &amp; tag"></a>2. Docker build &amp; tag</h2><p><a name="PZTIJ"></a></p>
+<h3 id="2-1-docker-build-Dockerfile-Default"><a href="#2-1-docker-build-Dockerfile-Default" class="headerlink" title="2.1 docker build Dockerfile(Default)"></a>2.1 docker build Dockerfile(Default)</h3><p>保留中间images layer，含有大量的无效内容，占用空间</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t docker-gs-ping .</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[+] Building 18.3s (11/11) FINISHED                                                                                                                                                           </span><br><span class="line">=&gt; [internal] load build definition from Dockerfile                                                                                                                                     0.1s</span><br><span class="line">=&gt; =&gt; transferring dockerfile: 845B                                                                                                                                                     0.0s</span><br><span class="line">=&gt; [internal] load .dockerignore                                                                                                                                                        0.1s</span><br><span class="line">=&gt; =&gt; transferring context: 2B                                                                                                                                                          0.0s</span><br><span class="line">=&gt; [internal] load metadata for docker.io/library/golang:1.19                                                                                                                           0.9s</span><br><span class="line">=&gt; [internal] load build context                                                                                                                                                        0.1s</span><br><span class="line">=&gt; =&gt; transferring context: 113B                                                                                                                                                        0.0s</span><br><span class="line">=&gt; [1/6] FROM docker.io/library/golang:1.19@sha256:6fb612aac0ae076bd4f6a76e48c4c8e59a4bae89dc5201252ec2b4eb8a2ae2a0                                                                     0.0s</span><br><span class="line">=&gt; CACHED [2/6] WORKDIR /app                                                                                                                                                            0.0s</span><br><span class="line">=&gt; CACHED [3/6] COPY go.mod go.sum ./                                                                                                                                                   0.0s</span><br><span class="line">=&gt; CACHED [4/6] COPY *.go ./                                                                                                                                                            0.0s</span><br><span class="line">=&gt; CACHED [5/6] RUN go mod download                                                                                                                                                     0.0s</span><br><span class="line">=&gt; [6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping                                                                                                                      11.4s</span><br><span class="line">=&gt; exporting to image                                                                                                                                                                   5.7s</span><br><span class="line">=&gt; =&gt; exporting layers                                                                                                                                                                  5.6s</span><br><span class="line">=&gt; =&gt; writing image sha256:b7fc8bf6f2a3c2bea6ad5e7c5d6e5009e4af081fba9b349fb28c0b513fff7f3b                                                                                             0.0s</span><br><span class="line">=&gt; =&gt; naming to docker.io/library/docker-gs-ping         </span><br></pre></td></tr></table></figure>
+<p><a name="zpGDE"></a></p>
+<h3 id="2-2-docker-build-Dockerfile-multistage"><a href="#2-2-docker-build-Dockerfile-multistage" class="headerlink" title="2.2 docker build Dockerfile.multistage"></a>2.2 docker build Dockerfile.multistage</h3><p>通过编写Dockerfile，只保留最终执行二进制程序的镜像层layer，为镜像瘦身</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker build -t docker-gs-ping:multistage -f Dockerfile.multistage .</span></span><br><span class="line">[+] Building 3.6s (15/15) FINISHED                                                                                                                                                            </span><br><span class="line"> =&gt; [internal] load build definition from Dockerfile.multistage                                                                                                                          0.1s</span><br><span class="line"> =&gt; =&gt; transferring dockerfile: 1.29kB                                                                                                                                                   0.0s</span><br><span class="line"> =&gt; [internal] load .dockerignore                                                                                                                                                        0.2s</span><br><span class="line"> =&gt; =&gt; transferring context: 2B                                                                                                                                                          0.0s</span><br><span class="line"> =&gt; [internal] load metadata for gcr.io/distroless/base-debian11:latest                                                                                                                  0.9s</span><br><span class="line"> =&gt; [internal] load metadata for docker.io/library/golang:1.19                                                                                                                           1.9s</span><br><span class="line"> =&gt; [auth] library/golang:pull token for registry-1.docker.io                                                                                                                            0.0s</span><br><span class="line"> =&gt; [build-stage 1/6] FROM docker.io/library/golang:1.19@sha256:6fb612aac0ae076bd4f6a76e48c4c8e59a4bae89dc5201252ec2b4eb8a2ae2a0                                                         0.0s</span><br><span class="line"> =&gt; [internal] load build context                                                                                                                                                        0.1s</span><br><span class="line"> =&gt; =&gt; transferring context: 113B                                                                                                                                                        0.0s</span><br><span class="line"> =&gt; [build-release-stage 1/3] FROM gcr.io/distroless/base-debian11@sha256:73deaaf6a207c1a33850257ba74e0f196bc418636cada9943a03d7abea980d6d                                               0.0s</span><br><span class="line"> =&gt; CACHED [build-stage 2/6] WORKDIR /app                                                                                                                                                0.0s</span><br><span class="line"> =&gt; CACHED [build-stage 3/6] COPY go.mod go.sum ./                                                                                                                                       0.0s</span><br><span class="line"> =&gt; CACHED [build-stage 4/6] COPY *.go ./                                                                                                                                                0.0s</span><br><span class="line"> =&gt; CACHED [build-stage 5/6] RUN go mod download                                                                                                                                         0.0s</span><br><span class="line"> =&gt; CACHED [build-stage 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping                                                                                                    0.0s</span><br><span class="line"> =&gt; CACHED [build-release-stage 2/3] COPY --from=build-stage /docker-gs-ping /docker-gs-ping                                                                                             0.0s</span><br><span class="line"> =&gt; exporting to image                                                                                                                                                                   0.2s</span><br><span class="line"> =&gt; =&gt; exporting layers                                                                                                                                                                  0.0s</span><br><span class="line"> =&gt; =&gt; writing image sha256:a25a652c98be74a5b713ca9db33c71387488cb7e02086044ccd75f580d808ee0                                                                                             0.0s</span><br><span class="line"> =&gt; =&gt; naming to docker.io/library/docker-gs-ping:multistage                                                                                                                             0.0s</span><br></pre></td></tr></table></figure>
+<p><a name="KJPR4"></a></p>
+<h3 id="2-3-docker-tag"><a href="#2-3-docker-tag" class="headerlink" title="2.3 docker tag"></a>2.3 docker tag</h3><p>删除 docker-gs-ping:v1.0 只会删除标签，不会删除原镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker tag docker-gs-ping:latest docker-gs-ping:v1.0</span><br><span class="line"></span><br><span class="line">docker images <span class="built_in">rm</span> docker-gs-ping:v1.0</span><br></pre></td></tr></table></figure>
+
+<p><a name="z8ygv"></a></p>
+<h2 id="3-Docker-run"><a href="#3-Docker-run" class="headerlink" title="3. Docker run"></a>3. Docker run</h2><p>In the previous module we created a Dockerfile for our example application and then we created our Docker image using the command docker build. Now that we have the image, we can run that image and see if our application is running correctly.</p>
+<ul>
+<li>–rm：退出容器时销毁 </li>
+<li>–publish -p：指定端口映射</li>
+<li>-it：**-i:** 以交互模式运行容器，通常与 -t 同时使用；</li>
+<li>–detach -d：后台运行，不进入容器</li>
+<li>–name：为容器命名</li>
+<li>-e username&#x3D;”ritchie”: 设置环境变量；</li>
+<li>–expose&#x3D;[]: 开放一个端口或一组端口；</li>
+<li>–volume , -v: 绑定一个卷</li>
+</ul>
+<p>-i,  当前宿主机终端变为容器里的终端<br />即使未连接STDIN（标准输入）也保持打开状态，分配一个交互终端，<br />-t, 表示容器启动后会进入其命令行，与it一起使用。<br />分配一个伪tty设备,可以支持终端登录<br />PS：针对纯操作系统镜像（没有守护进程的）在docker run的时候需要加-it参数，否则启动后会自动退出</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 8080:8080 docker-gs-ping</span><br><span class="line">d75e61fcad1e0c0eca69a3f767be6ba28a66625ce4dc42201a8a323e8313c14e</span><br></pre></td></tr></table></figure>
+
+<p><a name="KJCsU"></a></p>
+<h2 id="4-Docker-volume-amp-network"><a href="#4-Docker-volume-amp-network" class="headerlink" title="4. Docker volume &amp; network"></a>4. Docker volume &amp; network</h2><p>docker 基础设施(存储、计算、运输)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">docker volume create roach</span><br><span class="line"></span><br><span class="line">docker volume list</span><br><span class="line"></span><br><span class="line">docker network create mynet</span><br><span class="line"></span><br><span class="line">docker network list</span><br><span class="line"></span><br><span class="line">docker run -d \</span><br><span class="line">	--name roach \</span><br><span class="line">  --hostname db \</span><br><span class="line">  --network mynet \</span><br><span class="line">  -p 26257:26257 \</span><br><span class="line">  -p 8080:8080 \</span><br><span class="line">  -v roach:/cockroach/cockroach-data \</span><br><span class="line">  cockroachdb/cockroach:latest-v20.1 start-single-node \</span><br><span class="line">  --insecure</span><br></pre></td></tr></table></figure>
+
+<p><a name="vTtSp"></a></p>
+<h3 id="4-1-Storage-amp-Network"><a href="#4-1-Storage-amp-Network" class="headerlink" title="4.1 Storage &amp; Network"></a>4.1 Storage &amp; Network</h3><p>数据库的要点是拥有持久的数据存储。volume卷 是持久化 Docker 容器生成和使用的数据的首选机制。因此，在我们启动 CockroachDB 之前，让我们为它创建卷。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker volume create roach</span><br><span class="line">docker volume list</span><br></pre></td></tr></table></figure>
+<p>app 和 数据库引擎 将通过 网络 相互通信。有多种可能的网络配置，我们将使用所谓的用户定义的<code>bridge</code>桥接网络。它将为我们提供 DNS 查找服务，以便我们可以通过其主机名引用我们的数据库引擎容器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker network create mynet</span><br><span class="line">docker network list</span><br></pre></td></tr></table></figure>
+<p><a name="IiDJa"></a></p>
+<h3 id="4-2-Container-of-Database-Engine"><a href="#4-2-Container-of-Database-Engine" class="headerlink" title="4.2 Container of Database Engine"></a>4.2 Container of Database Engine</h3><p><a name="D1BSA"></a></p>
+<h3 id="i-Start-the-database-engine-container"><a href="#i-Start-the-database-engine-container" class="headerlink" title="i. Start the database engine container"></a>i. Start the database engine container</h3><p>在容器中运行 CockroachDB 并将其附加到我们刚刚创建的卷和网络。当您运行以下命令时，Docker 将从 Docker Hub 中拉取镜像并在本地为您运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">docker pull cockroachdb/cockroach:latest-v20.1</span><br><span class="line"></span><br><span class="line">docker run -d \</span><br><span class="line">  --name roach \</span><br><span class="line">  --hostname db \</span><br><span class="line">  --network mynet \</span><br><span class="line">  -p 26257:26257 \</span><br><span class="line">  -p 8080:8080 \</span><br><span class="line">  -v myroach:/cockroach/cockroach-data \</span><br><span class="line">  cockroachdb/cockroach:latest-v20.1 start-single-node \</span><br><span class="line">  --insecure</span><br><span class="line"></span><br><span class="line">173300cfbaef787fab4fbb03b3025e070397508729b9ec9b3e1d80aeda5abe9b</span><br></pre></td></tr></table></figure>
+<p><a name="Yos2y"></a></p>
+<h3 id="ii-Config-the-datebase-engine-container"><a href="#ii-Config-the-datebase-engine-container" class="headerlink" title="ii. Config the datebase engine container"></a>ii. Config the datebase engine container</h3><p>现在数据库引擎容器已经运行，在我们的app上可以开始使用它之前需要做一些配置。我们必须： </p>
+<ul>
+<li>创建一个空白数据库。 </li>
+<li>向数据库引擎注册一个新的用户帐户。 </li>
+<li>授予新用户对数据库的访问权限。</li>
+</ul>
+<p>我们可以借助 CockroachDB 内置的 SQL shell 来做到这一点。要在运行数据库引擎的容器内执行 SQL shell.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it roach /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看目录下文件</span></span><br><span class="line">root@db:/cockroach <span class="built_in">ls</span></span><br><span class="line"></span><br><span class="line">cockroach  cockroach-data  cockroach.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 与数据库交互 SQL shell </span></span><br><span class="line">root@db:/cockroach ./cockroach sql --insecure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者直接运行容器的SQL shell</span></span><br><span class="line">docker <span class="built_in">exec</span> -it roach ./cockroach sql --insecure</span><br><span class="line"></span><br><span class="line"><span class="comment"># create db</span></span><br><span class="line">root@:26257/defaultdb&gt; CREATE DATABASE mydb;</span><br><span class="line"></span><br><span class="line">CREATE DATABASE</span><br><span class="line">Time: 68.3925ms</span><br><span class="line"></span><br><span class="line"><span class="comment"># create user</span></span><br><span class="line">root@:26257/defaultdb&gt; CREATE USER soar;</span><br><span class="line"></span><br><span class="line">CREATE ROLE</span><br><span class="line">Time: 41.2268ms</span><br><span class="line"></span><br><span class="line"><span class="comment"># grant all</span></span><br><span class="line">root@:26257/defaultdb&gt; GRANT ALL ON DATABASE mydb TO soar;</span><br><span class="line"></span><br><span class="line">GRANT</span><br><span class="line">Time: 34.8493ms</span><br><span class="line"></span><br><span class="line"><span class="comment"># quit</span></span><br><span class="line">root@:26257/defaultdb&gt; quit</span><br></pre></td></tr></table></figure>
+<p><a name="hnn5e"></a></p>
+<h2 id="5-Extend-app-using-database-engine"><a href="#5-Extend-app-using-database-engine" class="headerlink" title="5. Extend app using database engine"></a>5. Extend app using database engine</h2><p><a name="bynBq"></a></p>
+<h3 id="5-1-Update-main-go"><a href="#5-1-Update-main-go" class="headerlink" title="5.1 Update main.go"></a>5.1 Update main.go</h3><p>现在我们已经启动并配置了数据库引擎，我们可以将注意力转移到应用程序上了。 此模块的示例应用程序是我们在之前的模块中使用的 docker-gs-ping 应用程序的扩展版本。你有两个选择：</p>
+<ul>
+<li>更新本地的 docker-gs-ping 副本以匹配本章中介绍的新扩展版本；</li>
+<li>克隆 olliefr&#x2F;docker-gs-ping-roach 存储库。</li>
+</ul>
+<p>main.go 现在包括数据库初始化代码，以及实现新业务需求的代码： </p>
+<ul>
+<li>对包含 { “value” : string } JSON 的 &#x2F;send 的 HTTP POST 请求必须将值保存到数据库中。 </li>
+<li>服务使用消息计数的字符串进行响应，该字符串括在括号中。</li>
+</ul>
+<p>示例输出：你好，Docker！(7)</p>
+<p><a name="xTY11"></a></p>
+<h3 id="5-2-Update-Dockerfile-amp-Build-app-image"><a href="#5-2-Update-Dockerfile-amp-Build-app-image" class="headerlink" title="5.2 Update Dockerfile &amp; Build app image"></a>5.2 Update Dockerfile &amp; Build app image</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># import golang base image</span></span><br><span class="line"><span class="keyword">FROM</span> golang:<span class="number">1.16</span>-buster AS build</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置工作目录,使用 WORKDIR 指令可以来指定工作目录（或者称为当前目录），</span></span><br><span class="line"><span class="comment"># 以后各层的当前目录就被改为指定的目录，如该目录不存在，WORKDIR 会帮你建立目录。</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将项目 modules files 复制进image中 /app/go.mod /app/go.sum</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> go.mod go.sum ./</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 引入程序源码</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> *.go ./</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># RUN 执行命令，下载项目引用的依赖</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> go mod download</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 上一步完成了工具链：编译、链接...，开始编译构建程序的二进制可执行文件</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> go build -o /docker-gs-ping-roach</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"><span class="comment">## Deploy</span></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"><span class="keyword">FROM</span> gcr.io/distroless/base-debian10</span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将编译后的二进制文件放入更精简的“distroless”镜像中来构建最终镜像</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> --from=build /docker-gs-ping-roach /docker-gs-ping-roach</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> nonroot:nonroot</span><br><span class="line"></span><br><span class="line"><span class="comment"># CMD and ENTRYPOINT tell Docker what command to execute when our image is used to start a container.</span></span><br><span class="line"><span class="comment"># images 加载进 container 时需要执行的操作</span></span><br><span class="line"><span class="comment"># CMD [&quot;/docker-ps-ping&quot;]</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;/docker-gs-ping-roach&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+<p><a name="PSAnV"></a></p>
+<h3 id="5-3-Build-amp-Run-app-image"><a href="#5-3-Build-amp-Run-app-image" class="headerlink" title="5.3 Build &amp; Run app image"></a>5.3 Build &amp; Run app image</h3><p>构建并运行我们的镜像。这次我们需要设置一些环境变量，以便我们的应用程序知道如何访问数据库。<br />现在，我们将在 docker run 命令中直接执行此操作。稍后我们将看到使用 Docker Compose 的更方便的方法。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">docker build --tag docker-gs-ping-roach .</span><br><span class="line"></span><br><span class="line">docker run -it --<span class="built_in">rm</span> -d \</span><br><span class="line">  --network mynet \</span><br><span class="line">  --name rest-server \</span><br><span class="line">  -p 80:8080 \</span><br><span class="line">  -e PGUSER=soar \</span><br><span class="line">  -e PGPASSWORD=myfriend \</span><br><span class="line">  -e PGHOST=db \</span><br><span class="line">  -e PGPORT=26257 \</span><br><span class="line">  -e PGDATABASE=mydb \</span><br><span class="line">  docker-gs-ping-roach</span><br><span class="line"></span><br><span class="line">docker run --<span class="built_in">rm</span> \</span><br><span class="line">  --network mynet \</span><br><span class="line">  --name rest-server \</span><br><span class="line">  -p 80:8080 \</span><br><span class="line">  -e PGUSER=soar \</span><br><span class="line">  -e PGPASSWORD=myfriend \</span><br><span class="line">  -e PGHOST=db \</span><br><span class="line">  -e PGPORT=26257 \</span><br><span class="line">  -e PGDATABASE=mydb \</span><br><span class="line">  docker-gs-ping-roach</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>该命令有几点需要注意。 我们这次将容器的8080端口映射到宿主机的80端口。因此，对于 GET 请求，我们可以直接使用 curl localhost：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@SoarYu ➜ /workspaces/docker-best-practices/go (main) $ curl localhost</span><br><span class="line"></span><br><span class="line">Hello, Docker! (0)</span><br><span class="line"></span><br><span class="line">@SoarYu ➜ /workspaces/docker-best-practices/go (main) $ curl --request POST \</span><br><span class="line">   --url http://localhost/send \</span><br><span class="line">   --header &#x27;content-type: application/json&#x27; \</span><br><span class="line">   --data &#x27;&#123;&quot;value&quot;: &quot;Hello, Docker!&quot;&#125;&#x27;</span><br><span class="line"></span><br><span class="line">&#123;&quot;value&quot;:&quot;Hello, Docker!&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>数据库中的记录数是正确的，因为容器重复使用了 CockroachDB 的卷，尽管我们不仅停止了容器，而且在启动新实例之前删除了它们。</p>
+<p>清除镜像与缓存<br />Now that you know the container IDs, you can use docker container stop and docker container rm, as demonstrated in the previous modules.<br />Please make sure that you stop the CockroachDB and docker-gs-ping-roach containers before moving on.<br><a name="mvNxG"></a></p>
+<h2 id="6-Docker-compose"><a href="#6-Docker-compose" class="headerlink" title="6. Docker compose"></a>6. Docker compose</h2><p><a name="wKzMu"></a></p>
+<h3 id="6-1-docker-compose-yml"><a href="#6-1-docker-compose-yml" class="headerlink" title="6.1 docker-compose.yml"></a>6.1 docker-compose.yml</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.8&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 要启动的容器</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">docker-gs-ping-roach:</span></span><br><span class="line">    <span class="attr">depends_on:</span> <span class="comment">#依赖</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">roach</span></span><br><span class="line">    <span class="attr">build:</span></span><br><span class="line">      <span class="attr">context:</span> <span class="string">.</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">rest-server</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">rest-server</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mynet</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">80</span><span class="string">:8080</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PGUSER=$&#123;PGUSER:-soar&#125;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PGPASSWORD=$&#123;PGPASSWORD:?database</span> <span class="string">password</span> <span class="string">not</span> <span class="string">set&#125;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PGHOST=$&#123;PGHOST:-db&#125;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PGPORT=$&#123;PGPORT:-26257&#125;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PGDATABASE=$&#123;PGDATABASE:-mydb&#125;</span></span><br><span class="line">    <span class="attr">deploy:</span></span><br><span class="line">      <span class="attr">restart_policy:</span></span><br><span class="line">        <span class="attr">condition:</span> <span class="string">on-failure</span></span><br><span class="line">  <span class="attr">roach:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">cockroachdb/cockroach:latest-v20.1</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">roach</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">db</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mynet</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">26257</span><span class="string">:26257</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">8080</span><span class="string">:8080</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">roach:/cockroach/cockroach-data</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">start-single-node</span> <span class="string">--insecure</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># import volume</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">roach:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># import network</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">mynet:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br></pre></td></tr></table></figure>
+<p>这个 Docker Compose 配置非常方便，因为我们不必键入所有参数来传递给 docker run 命令。我们可以在 Docker Compose 文件中以声明方式执行此操作。</p>
+<p><a name="O6xIK"></a></p>
+<h3 id="6-2-env-文件"><a href="#6-2-env-文件" class="headerlink" title="6.2 .env 文件"></a>6.2 .env 文件</h3><p>Docker Compose 将自动从 .env 文件中读取环境变量（如果可用）。由于我们的 Compose 文件需要设置 PGPASSWORD，因此我们将以下内容添加到 .env 文件中：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">PGPASSWORD=whatever</span></span><br></pre></td></tr></table></figure>
+<p>确切的值对于我们的示例并不重要，因为我们在不安全模式下运行 CockroachDB，但我们必须将变量设置为某个值以避免出现错误。</p>
+<p><a name="vgQPf"></a></p>
+<h3 id="6-3-指定合并多个-Compose-文件-f"><a href="#6-3-指定合并多个-Compose-文件-f" class="headerlink" title="6.3 指定合并多个 Compose 文件 -f"></a>6.3 指定合并多个 Compose 文件 -f</h3><p>如果没有提供 -f 标志，文件名 docker-compose.yml 是 docker-compose 命令识别的默认文件名。这意味着如果您的环境有这样的要求，您可以拥有多个 Docker Compose 文件。此外，Docker Compose 文件是……可组合的（双关语），因此可以在命令行上指定多个文件以将部分配置合并在一起。以下列表只是此类功能非常有用的场景的几个示例：</p>
+<ul>
+<li>对本地开发的源代码使用绑定安装，但在运行 CI 测试时不使用； </li>
+<li>在为某些 API 应用程序的前端使用预构建图像与为源代码创建绑定挂载之间切换； </li>
+<li>添加用于集成测试的附加服务； 还有很多…</li>
+</ul>
+<p><a name="zON5I"></a></p>
+<h3 id="6-4-Docker-Compose-中的变量替换"><a href="#6-4-Docker-Compose-中的变量替换" class="headerlink" title="6.4 Docker Compose 中的变量替换"></a>6.4 Docker Compose 中的变量替换</h3><p>Docker Compose 的一个非常酷的特性是变量替换。您可以在我们的 Compose 文件的环境部分中查看一些示例。通过一个例子：</p>
+<ul>
+<li>PGUSER&#x3D;${PGUSER:-soar} 表示在容器内部，环境变量 PGUSER 应设置为与运行 Docker Compose 的主机上相同的值。如果宿主机上没有这个名字的环境变量，容器内的变量取默认值soar。</li>
+<li>PGPASSWORD&#x3D;${PGPASSWORD:?database password not set} 表示如果主机上没有设置环境变量PGPASSWORD，Docker Compose会报错。这没关系，因为我们不想硬编码密码的默认值。我们在机器本地的 .env 文件中设置密码值。将 .env 添加到 .gitignore 总是一个好主意，以防止秘密被签入版本控制。</li>
+</ul>
+<p><a name="gCVXx"></a></p>
+<h3 id="6-5-验证-Docker-Compose-配置"><a href="#6-5-验证-Docker-Compose-配置" class="headerlink" title="6.5 验证 Docker Compose 配置"></a>6.5 验证 Docker Compose 配置</h3><p>在应用对 Compose 配置文件所做的更改之前，有机会使用以下命令验证配置文件的内容：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker-compose</span> <span class="string">config</span></span><br></pre></td></tr></table></figure>
+<p>运行此命令时，Docker Compose 将读取文件 docker-compose.yml，将其解析为内存中的数据结构，在可能的情况下进行验证，并从其内部表示打印回该配置文件的重建。如果由于错误而无法做到这一点，它将打印一条错误消息。</p>
+<p><a name="xdVSb"></a></p>
+<h3 id="6-6-使用-Docker-Compose-构建并运行应用程序"><a href="#6-6-使用-Docker-Compose-构建并运行应用程序" class="headerlink" title="6.6 使用 Docker Compose 构建并运行应用程序"></a>6.6 使用 Docker Compose 构建并运行应用程序</h3><p>:::info<br>Docker Compose 是一个有用的工具，但它有自己的怪癖。例如，如果不加上 –build，在更新源代码时就不会触发重建。编辑一个人的源代码是一个非常常见的陷阱，并且在运行 docker-compose up 时忘记使用 –build 标志。<br>:::</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker-compose</span> <span class="string">up</span> <span class="string">.</span> <span class="string">--buildud</span></span><br></pre></td></tr></table></figure>
+<p>我们传递了 –build 标志，这样 Docker 就会编译我们的镜像，然后启动它。<br />没有  –build  不会重新编译生成镜像</p>
+<p>由于我们的设置现在由 Docker Compose 运行，它已为其分配了一个“项目名称”，因此我们创建 CockroachDB 实例时使用了一个新卷。这意味着我们的应用程序将无法连接到数据库，因为数据库不存在于这个新卷中。终端将显示数据库的身份验证错误：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">rest-server</span>             <span class="string">|</span> <span class="attr">2021/05/10 00:54:25 failed to initialise the store: pq:</span> <span class="string">password</span> <span class="string">authentication</span> <span class="string">failed</span> <span class="string">for</span> <span class="string">user</span> <span class="string">totoro</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="string">*</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="string">*</span> <span class="attr">INFO:</span> <span class="string">Replication</span> <span class="string">was</span> <span class="string">disabled</span> <span class="string">for</span> <span class="string">this</span> <span class="string">cluster.</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="string">*</span> <span class="string">When/if</span> <span class="string">adding</span> <span class="string">nodes</span> <span class="string">in</span> <span class="string">the</span> <span class="string">future,</span> <span class="string">update</span> <span class="string">zone</span> <span class="string">configurations</span> <span class="string">to</span> <span class="string">increase</span> <span class="string">the</span> <span class="string">replication</span> <span class="string">factor.</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="string">*</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="string">CockroachDB</span> <span class="string">node</span> <span class="string">starting</span> <span class="string">at</span> <span class="number">2021-05-10 00:54:26.398177</span> <span class="string">+0000</span> <span class="string">UTC</span> <span class="string">(took</span> <span class="number">3.</span><span class="string">0s)</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="attr">build:</span>               <span class="string">CCL</span> <span class="string">v20.1.15</span> <span class="string">@</span> <span class="number">2021</span><span class="string">/04/26</span> <span class="number">16</span><span class="string">:11:58</span> <span class="string">(go1.13.9)</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="attr">webui:</span>               <span class="string">http://db:8080</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="attr">sql:</span>                 <span class="string">postgresql://root@db:26257?sslmode=disable</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="attr">RPC client flags:</span>    <span class="string">/cockroach/cockroach</span>  <span class="string">--host=db:26257</span> <span class="string">--insecure</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="attr">logs:</span>                <span class="string">/cockroach/cockroach-data/logs</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="attr">temp dir:</span>            <span class="string">/cockroach/cockroach-data/cockroach-temp349434348</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="attr">external I/O path:</span>   <span class="string">/cockroach/cockroach-data/extern</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="string">store[0]:</span>            <span class="string">path=/cockroach/cockroach-data</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="attr">storage engine:</span>      <span class="string">rocksdb</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="attr">status:</span>              <span class="string">initialized</span> <span class="string">new</span> <span class="string">cluster</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="attr">clusterID:</span>           <span class="string">b7b1cb93-558f-4058-b77e-8a4ddb329a88</span></span><br><span class="line"><span class="string">roach</span>                   <span class="string">|</span> <span class="attr">nodeID:</span>              <span class="number">1</span></span><br><span class="line"><span class="string">rest-server</span> <span class="string">exited</span> <span class="string">with</span> <span class="string">code</span> <span class="number">0</span></span><br><span class="line"><span class="string">rest-server</span>             <span class="string">|</span> <span class="attr">2021/05/10 00:54:25 failed to initialise the store: pq:</span> <span class="string">password</span> <span class="string">authentication</span> <span class="string">failed</span> <span class="string">for</span> <span class="string">user</span> <span class="string">totoro</span></span><br><span class="line"><span class="string">rest-server</span>             <span class="string">|</span> <span class="attr">2021/05/10 00:54:26 failed to initialise the store: pq:</span> <span class="string">password</span> <span class="string">authentication</span> <span class="string">failed</span> <span class="string">for</span> <span class="string">user</span> <span class="string">totoro</span></span><br><span class="line"><span class="string">rest-server</span>             <span class="string">|</span> <span class="attr">2021/05/10 00:54:29 failed to initialise the store: pq:</span> <span class="string">password</span> <span class="string">authentication</span> <span class="string">failed</span> <span class="string">for</span> <span class="string">user</span> <span class="string">totoro</span></span><br><span class="line"><span class="string">rest-server</span>             <span class="string">|</span> <span class="attr">2021/05/10 00:54:25 failed to initialise the store: pq:</span> <span class="string">password</span> <span class="string">authentication</span> <span class="string">failed</span> <span class="string">for</span> <span class="string">user</span> <span class="string">totoro</span></span><br><span class="line"><span class="string">rest-server</span>             <span class="string">|</span> <span class="attr">2021/05/10 00:54:26 failed to initialise the store: pq:</span> <span class="string">password</span> <span class="string">authentication</span> <span class="string">failed</span> <span class="string">for</span> <span class="string">user</span> <span class="string">totoro</span></span><br><span class="line"><span class="string">rest-server</span>             <span class="string">|</span> <span class="attr">2021/05/10 00:54:29 failed to initialise the store: pq:</span> <span class="string">password</span> <span class="string">authentication</span> <span class="string">failed</span> <span class="string">for</span> <span class="string">user</span> <span class="string">totoro</span></span><br><span class="line"><span class="string">rest-server</span> <span class="string">exited</span> <span class="string">with</span> <span class="string">code</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>Because of the way we set up our deployment using restart_policy, the failing container is being restarted every 20 seconds. So, in order to fix the problem, we need to log into the database engine and create the user, we’ve done it before in the []<br />This is not a big deal. All we have to do is to connect to CockroachDB instance and run the three SQL commands to create the database and the user, as described above in the Configure the database engine section above.<br />由于我们使用 <code>restart_policy</code> 设置部署的方式，失败的容器每 20 秒重新启动一次。所以，为了解决这个问题，我们需要登录数据库引擎并创建用户，如上文配置数据库引擎部分所述。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker</span> <span class="string">exec</span> <span class="string">-it</span> <span class="string">roach</span> <span class="string">./cockroach</span> <span class="string">sql</span> <span class="string">--insecure</span></span><br><span class="line"></span><br><span class="line"><span class="string">CREATE</span> <span class="string">USER</span> <span class="string">soar;</span></span><br><span class="line"><span class="string">CREATE</span> <span class="string">DATABASE</span> <span class="string">mydb;</span></span><br><span class="line"><span class="string">GRANT</span> <span class="string">ALL</span> <span class="string">ON</span> <span class="string">DATABASE</span> <span class="string">mydb</span> <span class="string">TO</span> <span class="string">soar;</span></span><br></pre></td></tr></table></figure>
+<p>And execute the same commands as before to create the database mydb, the user totoro, and to grant that user necessary permissions. Once we do that (and the example application container is automatically restarted), the rest-service stops failing and restarting and the console goes quiet.<br />It would have been possible to connect the volume that we had previously used, but for the purposes of our example it’s more trouble than it’s worth and it also provided an opportunity to show how to introduce resilience into our deployment via the restart_policy Compose file feature.<br />执行与之前相同的命令来创建数据库 mydb、用户 soar 并授予该用户必要的权限。一旦我们这样做了（并且示例应用程序容器自动重新启动），<code>rest-service</code> 停止失败并重新启动并且控制台变得安静。<br><a name="bVWQ3"></a></p>
+<h3 id="6-7-Shutting-down"><a href="#6-7-Shutting-down" class="headerlink" title="6.7 Shutting down"></a>6.7 Shutting down</h3><p>要停止由 Docker Compose 启动的容器，请在我们运行 <code>docker-compose up</code> 的终端中按 <code>ctrl+c</code>。要在停止后删除这些容器，请运行 <code>docker-compose down</code>。<br><a name="YK1D8"></a></p>
+<h3 id="6-8-Detached-mode"><a href="#6-8-Detached-mode" class="headerlink" title="6.8 Detached mode"></a>6.8 Detached mode</h3><p>您可以使用 -d 标志在分离模式下运行由 docker-compose 命令启动的容器，就像使用 docker 命令一样。 要启动由后台模式下的 Compose ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose up --build -d</span><br></pre></td></tr></table></figure>
+<p>然后，您可以使用 </p>
+<ul>
+<li><code>docker-compose stop</code> 停止容器</li>
+<li><code>docker-compose down</code> 删除它们。</li>
+</ul>
+<p><a name="qLdFM"></a></p>
+<h3 id="6-9-Other"><a href="#6-9-Other" class="headerlink" title="6.9 Other"></a>6.9 Other</h3><p><a name="hvLeS"></a></p>
+<h4 id="Further-exploration"><a href="#Further-exploration" class="headerlink" title="Further exploration"></a>Further exploration</h4><p>We would suggest running docker-compose to see what other commands are available.<br><a name="GmGwJ"></a></p>
+<h4 id="Wrap-up"><a href="#Wrap-up" class="headerlink" title="Wrap up"></a>Wrap up</h4><p>There are some tangential, yet interesting points that were purposefully not covered in this chapter. For the more adventurous reader, this section offers some pointers for further study.<br><a name="BzVxe"></a></p>
+<h4 id="Persistent-storage"><a href="#Persistent-storage" class="headerlink" title="Persistent storage"></a>Persistent storage</h4><p>A managed volume isn’t the only way to provide your container with persistent storage. It is highly recommended to get acquainted with available storage options and their use cases, covered in the following part of Docker documentation: <a target="_blank" rel="noopener" href="https://docs.docker.com/storage/">Manage data in Docker</a>.<br><a name="OVYII"></a></p>
+<h4 id="CockroachDB-clusters"><a href="#CockroachDB-clusters" class="headerlink" title="CockroachDB clusters"></a>CockroachDB clusters</h4><p>We run a single instance of CockroachDB, which was enough for our demonstration. But it is possible to run a CockroachDB cluster, which is made of multiple instances of CockroachDB, each instance running in its own container. Since CockroachDB engine is distributed by design, it would have taken us surprisingly little change to our procedure to run a cluster with multiple nodes.<br />Such distributed set-up offers interesting possibilities, such as applying Chaos Engineering techniques to simulate parts of the cluster failing and evaluating our application’s ability to cope with such failures.<br />If you are interested in experimenting with CockroachDB clusters, check out:<br /><a target="_blank" rel="noopener" href="https://www.cockroachlabs.com/docs/v20.2/start-a-local-cluster-in-docker-mac.html">Start a CockroachDB Cluster in Docker</a> article; and<br />Documentation for Docker Compose keywords <a target="_blank" rel="noopener" href="https://docs.docker.com/compose/compose-file/compose-file-v3/#deploy">deploy</a> and <a target="_blank" rel="noopener" href="https://docs.docker.com/compose/compose-file/compose-file-v3/#replicas">replicas</a>.<br><a name="Xich7"></a></p>
+<h4 id="Other-databases"><a href="#Other-databases" class="headerlink" title="Other databases"></a>Other databases</h4><p>Since we did not run a cluster of CockroachDB instances, you might be wondering whether we could have used a non-distributed database engine. The answer is ‘yes’, and if we were to pick a more traditional SQL database, such as <a target="_blank" rel="noopener" href="https://www.postgresql.org/">PostgreSQL</a>, the process described in this chapter would have been very similar.<br><a name="Pmssk"></a></p>
+<h4 id="Next-steps"><a href="#Next-steps" class="headerlink" title="Next steps"></a>Next steps</h4><p>In this module, we set up a containerised development environment with our application and the database engine running in different containers. We also wrote a Docker Compose file which links the two containers together and provides for easy starting up and tearing down of the development environment.<br />In the next module, we’ll take a look at one possible approach to running functional tests in Docker. See:<br /><a target="_blank" rel="noopener" href="https://docs.docker.com/language/golang/run-tests/">Run your tests</a></p>
+<p><a name="dVEvj"></a></p>
+<h2 id="7-Run-your-tests-using-Go-test"><a href="#7-Run-your-tests-using-Go-test" class="headerlink" title="7. Run your tests using Go test"></a>7. Run your tests using Go test</h2><p>测试是现代软件开发的重要组成部分。然而，测试对于不同的开发团队来说可能意味着很多事情。为简洁起见，我们将只看一下运行孤立的、高级的、功能测试。<br><a name="wL0hP"></a></p>
+<h3 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h3><p>每个测试都旨在验证我们的示例应用程序的单个业务需求。以下测试摘自我们示例应用程序中的 main_test.go 测试套件。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestRespondsWithLove</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	pool, err := dockertest.NewPool(<span class="string">&quot;&quot;</span>)</span><br><span class="line">	require.NoError(t, err, <span class="string">&quot;could not connect to Docker&quot;</span>)</span><br><span class="line"></span><br><span class="line">	resource, err := pool.Run(<span class="string">&quot;docker-gs-ping&quot;</span>, <span class="string">&quot;latest&quot;</span>, []<span class="type">string</span>&#123;&#125;)</span><br><span class="line">	require.NoError(t, err, <span class="string">&quot;could not start container&quot;</span>)</span><br><span class="line"></span><br><span class="line">	t.Cleanup(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		require.NoError(t, pool.Purge(resource), <span class="string">&quot;failed to remove container&quot;</span>)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> resp *http.Response</span><br><span class="line"></span><br><span class="line">	err = pool.Retry(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">error</span> &#123;</span><br><span class="line">		resp, err = http.Get(fmt.Sprint(<span class="string">&quot;http://localhost:&quot;</span>, resource.GetPort(<span class="string">&quot;8080/tcp&quot;</span>), <span class="string">&quot;/&quot;</span>))</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			t.Log(<span class="string">&quot;container not ready, waiting...&quot;</span>)</span><br><span class="line">			<span class="keyword">return</span> err</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;)</span><br><span class="line">	require.NoError(t, err, <span class="string">&quot;HTTP error&quot;</span>)</span><br><span class="line">	<span class="keyword">defer</span> resp.Body.Close()</span><br><span class="line"></span><br><span class="line">	require.Equal(t, http.StatusOK, resp.StatusCode, <span class="string">&quot;HTTP status code&quot;</span>)</span><br><span class="line"></span><br><span class="line">	body, err := io.ReadAll(resp.Body)</span><br><span class="line">	require.NoError(t, err, <span class="string">&quot;failed to read HTTP body&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Finally, test the business requirement!</span></span><br><span class="line">	require.Contains(t, <span class="type">string</span>(body), <span class="string">&quot;&lt;3&quot;</span>, <span class="string">&quot;does not respond with love?&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如您所见，这是一个高级测试，与示例应用程序的实现细节无关。 测试使用的是 ory&#x2F;dockertest Go 模块； 该测试假定 Docker 引擎实例在运行测试的同一台机器上运行。<br><a name="GZ9Q7"></a></p>
+<h3 id="本地测试"><a href="#本地测试" class="headerlink" title="本地测试"></a>本地测试</h3><ul>
+<li><p>构造测试镜像</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build --tag docker-gs-ping .</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行测试</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> test ./...</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><a name="uozHp"></a></p>
+<h2 id="8-Configure-CI-x2F-CD-for-your-application"><a href="#8-Configure-CI-x2F-CD-for-your-application" class="headerlink" title="8. Configure CI&#x2F;CD for your application"></a>8. Configure CI&#x2F;CD for your application</h2><p><a name="UKAG4"></a></p>
+<h3 id="Git-Actions"><a href="#Git-Actions" class="headerlink" title="Git Actions"></a>Git Actions</h3><p>本教程将引导您完成设置和使用 GitHub Actions 来构建 Docker 映像以及将映像推送到 Docker Hub 的过程。您将完成以下步骤： </p>
+<ul>
+<li>在 GitHub 上创建一个新的存储库。 </li>
+<li>定义 GitHub Actions workflow工作流。 </li>
+<li>运行workflow工作流。</li>
+</ul>
+<p>要学习本教程，您需要一个 Docker ID 和一个 GitHub 帐户。<br><a name="xSTg6"></a></p>
+<h3 id="Config-the-github-repository"><a href="#Config-the-github-repository" class="headerlink" title="Config the github repository"></a>Config the github repository</h3><p>创建 GitHub 仓库并配置 Docker Hub secrets 。 </p>
+<ul>
+<li>使用此模板存储库创建一个 GitHub 存储库。 存储库包含一个简单的 Dockerfile，仅此而已。如果您愿意，可以随意使用另一个包含有效 Dockerfile 的存储库。 </li>
+<li>打开存储库设置，然后转到 Secrets and variables &gt; Actions。 </li>
+<li>创建一个名为 DOCKERHUB_USERNAME 的 secrets 密钥 ，并将您的 <code>Docker ID</code> 作为密钥的value值。 </li>
+<li>创建一个 <a target="_blank" rel="noopener" href="https://docs.docker.com/docker-hub/access-tokens/#create-an-access-token">Personal Access Token (PAT)</a>  的 Docker Hub 个人访问令牌 。您可以将此令牌命名为 clockboxci。 </li>
+<li>在 GitHub settins 中添加这个 PAT 作为第二个秘密，名称为 <code>DOCKERHUB_TOKEN</code>。</li>
+</ul>
+<p>创建存储库并配置机密后，您现在就可以开始行动了！<br><a name="M3qwr"></a></p>
+<h3 id="Config-the-workflow"><a href="#Config-the-workflow" class="headerlink" title="Config the workflow"></a>Config the workflow</h3><p>设置 GitHub Actions 工作流程以构建映像并将其推送到 Docker Hub。 </p>
+<ul>
+<li>转到您在 GitHub 上的存储库，然后选择“操作”选项卡。 </li>
+<li>选择自己设置工作流程。 这会将您带到一个页面，用于在存储库中创建新的 GitHub 操作工作流文件，默认情况下位于 .github&#x2F;workflows&#x2F;main.yml 下。 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">ci</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;main&quot;</span></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="comment"># 检查构建机器上的存储库。</span></span><br><span class="line">      <span class="bullet">-</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">Checkout</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span></span><br><span class="line">    <span class="comment"># 通过Actions的配置登录 Docker Hub, </span></span><br><span class="line">      <span class="bullet">-</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">Login</span> <span class="string">to</span> <span class="string">Docker</span> <span class="string">Hub</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">docker/login-action@v2</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">username:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.DOCKERHUB_USERNAME</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">password:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.DOCKERHUB_TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line">    <span class="comment"># 使用 Docker Setup Buildx 操作创建 BuildKit builder instance实例。</span></span><br><span class="line">      <span class="bullet">-</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">Set</span> <span class="string">up</span> <span class="string">Docker</span> <span class="string">Buildx</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">docker/setup-buildx-action@v2</span></span><br><span class="line">    <span class="comment"># 使用 Build and push Docker images, build 和 push 镜像到 Docker Hub 上</span></span><br><span class="line">      <span class="bullet">-</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">Build</span> <span class="string">and</span> <span class="string">push</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">docker/build-push-action@v4</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="comment"># the build context</span></span><br><span class="line">          <span class="attr">context:</span> <span class="string">./go/docker-gs-ping/.</span></span><br><span class="line">          <span class="comment"># filepath to the Dockerfile.</span></span><br><span class="line">          <span class="attr">file:</span> <span class="string">./go/docker-gs-ping/Dockerfile</span></span><br><span class="line">          <span class="comment"># tells the action to upload the image to a registry after building it.</span></span><br><span class="line">          <span class="attr">push:</span> <span class="literal">true</span> </span><br><span class="line">          <span class="comment"># tags that specify where to push the image.</span></span><br><span class="line">          <span class="attr">tags:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.DOCKERHUB_USERNAME</span> <span class="string">&#125;&#125;/clockbox:latest</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<a name="U4LfK"></a></li>
+</ul>
+<h3 id="Run-the-workflow"><a href="#Run-the-workflow" class="headerlink" title="Run the workflow"></a>Run the workflow</h3><ol>
+<li>保存工作流文件并运行作业。 选择 <strong>Commit changes…</strong> 并将更改推送到 <code>main</code>分支。</li>
+</ol>
+<p>推送提交后，工作流自动启动。 </p>
+<ol start="2">
+<li>转到“操作”选项卡。它显示工作流程。 选择工作流程会向您显示所有步骤的分解。 </li>
+<li>工作流完成后，转到 Docker Hub 上的存储库。</li>
+</ol>
+<p>如果您在该列表中看到新的存储库，则表示 GitHub Actions 已成功将映像推送到 Docker Hub！</p>
+<p><a name="d7KwD"></a></p>
+<h2 id="9-Deploy-your-app"><a href="#9-Deploy-your-app" class="headerlink" title="9. Deploy your app"></a>9. Deploy your app</h2><p><a target="_blank" rel="noopener" href="https://docs.docker.com/language/golang/deploy/">https://docs.docker.com/language/golang/deploy/</a></p>
+<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><p><a target="_blank" rel="noopener" href="https://docs.docker.com/language/golang/build-images/">https://docs.docker.com/language/golang/build-images/</a><br /><a target="_blank" rel="noopener" href="https://github.com/olliefr/docker-gs-ping">https://github.com/olliefr/docker-gs-ping</a><br /><a target="_blank" rel="noopener" href="https://docs.github.com/zh/codespaces/developing-in-codespaces/using-github-codespaces-with-github-cli">https://docs.github.com/zh/codespaces/developing-in-codespaces/using-github-codespaces-with-github-cli</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/05/07/nginx/" rel="prev" title="CentOS 7 安装部署 Nginx 并配置端口转发">
+      <i class="fa fa-chevron-left"></i> CentOS 7 安装部署 Nginx 并配置端口转发
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Dockerfile"><span class="nav-number">1.</span> <span class="nav-text">1. Dockerfile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Git-clone-a-application"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Git clone a application</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Create-a-Dockerfile"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 Create a Dockerfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Create-a-Dockerfile-multistage"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 Create a Dockerfile.multistage</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Docker-build-amp-tag"><span class="nav-number">2.</span> <span class="nav-text">2. Docker build &amp; tag</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-docker-build-Dockerfile-Default"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 docker build Dockerfile(Default)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-docker-build-Dockerfile-multistage"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 docker build Dockerfile.multistage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-docker-tag"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 docker tag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Docker-run"><span class="nav-number">3.</span> <span class="nav-text">3. Docker run</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Docker-volume-amp-network"><span class="nav-number">4.</span> <span class="nav-text">4. Docker volume &amp; network</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Storage-amp-Network"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 Storage &amp; Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Container-of-Database-Engine"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 Container of Database Engine</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#i-Start-the-database-engine-container"><span class="nav-number">4.3.</span> <span class="nav-text">i. Start the database engine container</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ii-Config-the-datebase-engine-container"><span class="nav-number">4.4.</span> <span class="nav-text">ii. Config the datebase engine container</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Extend-app-using-database-engine"><span class="nav-number">5.</span> <span class="nav-text">5. Extend app using database engine</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-Update-main-go"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 Update main.go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Update-Dockerfile-amp-Build-app-image"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 Update Dockerfile &amp; Build app image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-Build-amp-Run-app-image"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 Build &amp; Run app image</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Docker-compose"><span class="nav-number">6.</span> <span class="nav-text">6. Docker compose</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-docker-compose-yml"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 docker-compose.yml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-env-%E6%96%87%E4%BB%B6"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 .env 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E6%8C%87%E5%AE%9A%E5%90%88%E5%B9%B6%E5%A4%9A%E4%B8%AA-Compose-%E6%96%87%E4%BB%B6-f"><span class="nav-number">6.3.</span> <span class="nav-text">6.3 指定合并多个 Compose 文件 -f</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-Docker-Compose-%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E6%9B%BF%E6%8D%A2"><span class="nav-number">6.4.</span> <span class="nav-text">6.4 Docker Compose 中的变量替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-%E9%AA%8C%E8%AF%81-Docker-Compose-%E9%85%8D%E7%BD%AE"><span class="nav-number">6.5.</span> <span class="nav-text">6.5 验证 Docker Compose 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-6-%E4%BD%BF%E7%94%A8-Docker-Compose-%E6%9E%84%E5%BB%BA%E5%B9%B6%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-number">6.6.</span> <span class="nav-text">6.6 使用 Docker Compose 构建并运行应用程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-7-Shutting-down"><span class="nav-number">6.7.</span> <span class="nav-text">6.7 Shutting down</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-8-Detached-mode"><span class="nav-number">6.8.</span> <span class="nav-text">6.8 Detached mode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-9-Other"><span class="nav-number">6.9.</span> <span class="nav-text">6.9 Other</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Further-exploration"><span class="nav-number">6.9.1.</span> <span class="nav-text">Further exploration</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Wrap-up"><span class="nav-number">6.9.2.</span> <span class="nav-text">Wrap up</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Persistent-storage"><span class="nav-number">6.9.3.</span> <span class="nav-text">Persistent storage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CockroachDB-clusters"><span class="nav-number">6.9.4.</span> <span class="nav-text">CockroachDB clusters</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Other-databases"><span class="nav-number">6.9.5.</span> <span class="nav-text">Other databases</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Next-steps"><span class="nav-number">6.9.6.</span> <span class="nav-text">Next steps</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Run-your-tests-using-Go-test"><span class="nav-number">7.</span> <span class="nav-text">7. Run your tests using Go test</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="nav-number">7.1.</span> <span class="nav-text">测试用例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%B5%8B%E8%AF%95"><span class="nav-number">7.2.</span> <span class="nav-text">本地测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Configure-CI-x2F-CD-for-your-application"><span class="nav-number">8.</span> <span class="nav-text">8. Configure CI&#x2F;CD for your application</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-Actions"><span class="nav-number">8.1.</span> <span class="nav-text">Git Actions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Config-the-github-repository"><span class="nav-number">8.2.</span> <span class="nav-text">Config the github repository</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Config-the-workflow"><span class="nav-number">8.3.</span> <span class="nav-text">Config the workflow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-the-workflow"><span class="nav-number">8.4.</span> <span class="nav-text">Run the workflow</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Deploy-your-app"><span class="nav-number">9.</span> <span class="nav-text">9. Deploy your app</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-number">10.</span> <span class="nav-text">相关链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">SoarYu</p>
+  <div class="site-description" itemprop="description">Done is better than perfect!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SoarYu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

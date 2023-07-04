@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.soar2568.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ubuntu使用docker部署nacos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nacos-docker部署">
+<meta property="og:url" content="http://blog.soar2568.top/2022/06/21/docker-nacos/index.html">
+<meta property="og:site_name" content="Soar2568">
+<meta property="og:description" content="ubuntu使用docker部署nacos">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://blog.soar2568.top/img/docker-nacos/hello_nacos.png">
+<meta property="article:published_time" content="2022-06-21T15:21:43.000Z">
+<meta property="article:modified_time" content="2023-07-04T08:09:47.312Z">
+<meta property="article:author" content="SoarYu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.soar2568.top/img/docker-nacos/hello_nacos.png">
+
+<link rel="canonical" href="http://blog.soar2568.top/2022/06/21/docker-nacos/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>nacos-docker部署 | Soar2568</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Soar2568</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.soar2568.top/2022/06/21/docker-nacos/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="SoarYu">
+      <meta itemprop="description" content="Done is better than perfect!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Soar2568">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          nacos-docker部署
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-21 15:21:43" itemprop="dateCreated datePublished" datetime="2022-06-21T15:21:43+00:00">2022-06-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-07-04 08:09:47" itemprop="dateModified" datetime="2023-07-04T08:09:47+00:00">2023-07-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">ubuntu使用docker部署nacos</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="docker-安装"><a href="#docker-安装" class="headerlink" title="docker 安装"></a>docker 安装</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install docker.io</span><br></pre></td></tr></table></figure>
+
+<h2 id="docker-官方拉取"><a href="#docker-官方拉取" class="headerlink" title="docker 官方拉取"></a>docker 官方拉取</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull nacos/nacos-server:latest</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<h3 id="创建本地的映射文件"><a href="#创建本地的映射文件" class="headerlink" title="创建本地的映射文件"></a>创建本地的映射文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /root/nacos/logs</span><br></pre></td></tr></table></figure>
+
+<h2 id="初始化-mysql-数据库"><a href="#初始化-mysql-数据库" class="headerlink" title="初始化 mysql 数据库"></a>初始化 mysql 数据库</h2><p>从以下链接获取sql脚本：<a target="_blank" rel="noopener" href="https://github.com/alibaba/nacos/blob/develop/distribution/conf/nacos-mysql.sql">https://github.com/alibaba/nacos/blob/develop/distribution/conf/nacos-mysql.sql</a></p>
+<h2 id="单机模式中-e-添加的参数不同与集群模式，集群模式见文章结尾。"><a href="#单机模式中-e-添加的参数不同与集群模式，集群模式见文章结尾。" class="headerlink" title="单机模式中-e 添加的参数不同与集群模式，集群模式见文章结尾。"></a>单机模式中-e 添加的参数不同与集群模式，集群模式见文章结尾。</h2><p>单机模式中&#x2F;home&#x2F;nacos&#x2F;conf&#x2F;application.properties 配置文件如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"># spring</span><br><span class="line">server.servlet.contextPath=$&#123;SERVER_SERVLET_CONTEXTPATH:/nacos&#125;</span><br><span class="line">server.contextPath=/nacos</span><br><span class="line">server.port=$&#123;NACOS_SERVER_PORT:8848&#125;</span><br><span class="line">spring.datasource.platform=$&#123;SPRING_DATASOURCE_PLATFORM:&quot;&quot;&#125;</span><br><span class="line">nacos.cmdb.dumpTaskInterval=3600</span><br><span class="line">nacos.cmdb.eventTaskInterval=10</span><br><span class="line">nacos.cmdb.labelTaskInterval=300</span><br><span class="line">nacos.cmdb.loadDataAtStart=false</span><br><span class="line">db.num=$&#123;MYSQL_DATABASE_NUM:1&#125;</span><br><span class="line">db.url.0=jdbc:mysql://$&#123;MYSQL_SERVICE_HOST&#125;:$&#123;MYSQL_SERVICE_PORT:3306&#125;/$&#123;MYSQL_SERVICE_DB_NAME&#125;?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true</span><br><span class="line">db.url.1=jdbc:mysql://$&#123;MYSQL_SERVICE_HOST&#125;:$&#123;MYSQL_SERVICE_PORT:3306&#125;/$&#123;MYSQL_SERVICE_DB_NAME&#125;?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true</span><br><span class="line">db.user=$&#123;MYSQL_SERVICE_USER&#125;</span><br><span class="line">db.password=$&#123;MYSQL_SERVICE_PASSWORD&#125;</span><br><span class="line">### The auth system to use, currently only &#x27;nacos&#x27; is supported:</span><br><span class="line">nacos.core.auth.system.type=$&#123;NACOS_AUTH_SYSTEM_TYPE:nacos&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### The token expiration in seconds:</span><br><span class="line">nacos.core.auth.default.token.expire.seconds=$&#123;NACOS_AUTH_TOKEN_EXPIRE_SECONDS:18000&#125;</span><br><span class="line"></span><br><span class="line">### The default token:</span><br><span class="line">nacos.core.auth.default.token.secret.key=$&#123;NACOS_AUTH_TOKEN:SecretKey012345678901234567890123456789012345678901234567890123456789&#125;</span><br><span class="line"></span><br><span class="line">### Turn on/off caching of auth information. By turning on this switch, the update of auth information would have a 15 seconds delay.</span><br><span class="line">nacos.core.auth.caching.enabled=$&#123;NACOS_AUTH_CACHE_ENABLE:false&#125;</span><br><span class="line"></span><br><span class="line">server.tomcat.accesslog.enabled=$&#123;TOMCAT_ACCESSLOG_ENABLED:false&#125;</span><br><span class="line">server.tomcat.accesslog.pattern=%h %l %u %t &quot;%r&quot; %s %b %D</span><br><span class="line"># default current work dir</span><br><span class="line">server.tomcat.basedir=</span><br><span class="line">## spring security config</span><br><span class="line">### turn off security</span><br><span class="line">nacos.security.ignore.urls=/,/error,/**/*.css,/**/*.js,/**/*.html,/**/*.map,/**/*.svg,/**/*.png,/**/*.ico,/console-fe/public/**,/v1/auth/**,/v1/console/health/**,/actuator/**,/v1/console/server/**</span><br><span class="line"># metrics for elastic search</span><br><span class="line">management.metrics.export.elastic.enabled=false</span><br><span class="line">management.metrics.export.influx.enabled=false</span><br><span class="line"></span><br><span class="line">nacos.naming.distro.taskDispatchThreadCount=10</span><br><span class="line">nacos.naming.distro.taskDispatchPeriod=200</span><br><span class="line">nacos.naming.distro.batchSyncKeyCount=1000</span><br><span class="line">nacos.naming.distro.initDataRatio=0.9</span><br><span class="line">nacos.naming.distro.syncRetryDelay=5000</span><br><span class="line">nacos.naming.data.warmup=true</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建nacos容器-单例模式"><a href="#创建nacos容器-单例模式" class="headerlink" title="创建nacos容器(单例模式)"></a>创建nacos容器(单例模式)</h2><p>这里以单点的模式为例,Docker启动需要暴露8848 9848 9849三个端口<br>为什么要开放三个端口？<br>可以发现官方文档中有这么一段话：Nacos2.x版本相比1.X新增了gRPC的通信方式，因此需要增加2个端口。新增端口是在配置的主端口(server.port)基础上，进行一定偏移量自动生成。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 8848:8848 -p 9848:9848 -p 9849:9849 \</span><br><span class="line">-e MODE=standalone \</span><br><span class="line">-e PREFER_HOST_MODE=hostname \ </span><br><span class="line">-e SPRING_DATASOURCE_PLATFORM=mysql \</span><br><span class="line">-e MYSQL_SERVICE_HOST=127.0.0.1 \</span><br><span class="line">-e MYSQL_SERVICE_PORT=3306 \</span><br><span class="line">-e MYSQL_SERVICE_DB_NAME=nacos_config \</span><br><span class="line">-e MYSQL_SERVICE_USER=root \</span><br><span class="line">-e MYSQL_SERVICE_PASSWORD=123456 \</span><br><span class="line">-e MYSQL_DATABASE_NUM=1 \</span><br><span class="line">-v /root/nacos/logs:/home/nacos/logs \</span><br><span class="line">--restart always --name nacos nacos/nacos-server:latest</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 8848:8848 -p 9848:9848 -p 9849:9849 -e MODE=standalone -e PREFER_HOST_MODE=hostname -e SPRING_DATASOURCE_PLATFORM=mysql -e MYSQL_SERVICE_HOST=192.168.66.146 -e MYSQL_SERVICE_PORT=3306 -e MYSQL_SERVICE_DB_NAME=nacos_config -e MYSQL_SERVICE_USER=root -e MYSQL_SERVICE_PASSWORD=123456 -e MYSQL_DATABASE_NUM=1 -v /root/nacos/logs:/home/nacos/logs --name nacos nacos/nacos-server:latest</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start nacos</span><br></pre></td></tr></table></figure>
+<h3 id="访问http-localhost-8848-nacos-账号默认nacos、密码默认nacos"><a href="#访问http-localhost-8848-nacos-账号默认nacos、密码默认nacos" class="headerlink" title="访问http://localhost:8848/nacos/ 账号默认nacos、密码默认nacos"></a>访问<a target="_blank" rel="noopener" href="http://localhost:8848/nacos/">http://localhost:8848/nacos/</a> 账号默认nacos、密码默认nacos</h3><p>新建txt配置文件<br><img src="/img/docker-nacos/hello_nacos.png" alt="hello nacos"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Service registration服务注册示例</span><br><span class="line"></span><br><span class="line">curl -X POST &#x27;http://127.0.0.1:8848/nacos/v1/ns/instance?serviceName=nacos.naming.serviceName&amp;ip=20.18.7.10&amp;port=8080&#x27;</span><br><span class="line">Service discovery服务发现示例</span><br><span class="line"></span><br><span class="line">curl -X GET &#x27;http://127.0.0.1:8848/nacos/v1/ns/instance/list?serviceName=nacos.naming.serviceName&#x27;</span><br><span class="line">Publish config推送配置示例</span><br><span class="line"></span><br><span class="line">curl -X POST &quot;http://127.0.0.1:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test&amp;content=helloWorld&quot;</span><br><span class="line">Get config获取配置示例</span><br><span class="line"></span><br><span class="line">curl -X GET &quot;http://127.0.0.1:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="集群部署"><a href="#集群部署" class="headerlink" title="集群部署"></a>集群部署</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">--network myNetwork --ip 172.18.0.4 --name nacos-server-18848 \</span><br><span class="line">-e MODE=cluster \</span><br><span class="line">-e SPRING_DATASOURCE_PLATFORM=mysql \</span><br><span class="line">-e MYSQL_SERVICE_HOST=172.18.0.3 \</span><br><span class="line">-e MYSQL_SERVICE_PORT=3306 \</span><br><span class="line">-e MYSQL_SERVICE_USER=root \</span><br><span class="line">-e MYSQL_SERVICE_PASSWORD=123456 \</span><br><span class="line">-e MYSQL_SERVICE_DB_NAME=nacos_config \</span><br><span class="line">-e NACOS_SERVER_PORT=8848 \</span><br><span class="line">-e NACOS_SERVERS=&quot;172.18.0.4:8848 172.18.0.5:8848 172.18.0.6:8848&quot; \</span><br><span class="line">-e NACOS_SERVER_IP=172.18.0.4 \</span><br><span class="line">-e JVM_XMS=256m -e JVM_XMX=512m  \</span><br><span class="line">-v /usr/local/nacos/logs/nacos-server-18848:/home/nacos/logs \</span><br><span class="line">-v /usr/local/nacos/conf:/home/nacos/conf \</span><br><span class="line">-p 18848:8848 \</span><br><span class="line">nacos/nacos-server</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/21/hello-world/" rel="prev" title="About Hexo">
+      <i class="fa fa-chevron-left"></i> About Hexo
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/21/nacos-coredns-plugin/" rel="next" title="linux部署nacos-coredns-plugin">
+      linux部署nacos-coredns-plugin <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">docker 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-%E5%AE%98%E6%96%B9%E6%8B%89%E5%8F%96"><span class="nav-number">2.</span> <span class="nav-text">docker 官方拉取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%AC%E5%9C%B0%E7%9A%84%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">创建本地的映射文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-mysql-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">3.</span> <span class="nav-text">初始化 mysql 数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E6%9C%BA%E6%A8%A1%E5%BC%8F%E4%B8%AD-e-%E6%B7%BB%E5%8A%A0%E7%9A%84%E5%8F%82%E6%95%B0%E4%B8%8D%E5%90%8C%E4%B8%8E%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F%EF%BC%8C%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F%E8%A7%81%E6%96%87%E7%AB%A0%E7%BB%93%E5%B0%BE%E3%80%82"><span class="nav-number">4.</span> <span class="nav-text">单机模式中-e 添加的参数不同与集群模式，集群模式见文章结尾。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAnacos%E5%AE%B9%E5%99%A8-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">创建nacos容器(单例模式)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%AE%B9%E5%99%A8"><span class="nav-number">6.</span> <span class="nav-text">启动容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AEhttp-localhost-8848-nacos-%E8%B4%A6%E5%8F%B7%E9%BB%98%E8%AE%A4nacos%E3%80%81%E5%AF%86%E7%A0%81%E9%BB%98%E8%AE%A4nacos"><span class="nav-number">6.1.</span> <span class="nav-text">访问http:&#x2F;&#x2F;localhost:8848&#x2F;nacos&#x2F; 账号默认nacos、密码默认nacos</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2"><span class="nav-number">7.</span> <span class="nav-text">集群部署</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">SoarYu</p>
+  <div class="site-description" itemprop="description">Done is better than perfect!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SoarYu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

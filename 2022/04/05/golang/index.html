@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.soar2568.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="golang 学习记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang 学习笔记">
+<meta property="og:url" content="http://blog.soar2568.top/2022/04/05/golang/index.html">
+<meta property="og:site_name" content="Soar2568">
+<meta property="og:description" content="golang 学习记录">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-05T04:04:43.000Z">
+<meta property="article:modified_time" content="2023-07-04T08:09:47.312Z">
+<meta property="article:author" content="SoarYu">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://blog.soar2568.top/2022/04/05/golang/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>golang 学习笔记 | Soar2568</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Soar2568</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.soar2568.top/2022/04/05/golang/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="SoarYu">
+      <meta itemprop="description" content="Done is better than perfect!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Soar2568">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          golang 学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-04-05 04:04:43" itemprop="dateCreated datePublished" datetime="2022-04-05T04:04:43+00:00">2022-04-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-07-04 08:09:47" itemprop="dateModified" datetime="2023-07-04T08:09:47+00:00">2023-07-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/go/" itemprop="url" rel="index"><span itemprop="name">go</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">golang 学习记录</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="golang-学习"><a href="#golang-学习" class="headerlink" title="golang 学习"></a>golang 学习</h1><h2 id="一、基础变量-值传递-引用传递-slice-map"><a href="#一、基础变量-值传递-引用传递-slice-map" class="headerlink" title="一、基础变量 值传递 引用传递 slice map"></a>一、基础变量 值传递 引用传递 slice map</h2><h3 id="值传递-引用传递-slice-forrange-append"><a href="#值传递-引用传递-slice-forrange-append" class="headerlink" title="值传递 引用传递 slice forrange append"></a>值传递 引用传递 slice forrange append</h3><h3 id="1-1-值传递-引用传递"><a href="#1-1-值传递-引用传递" class="headerlink" title="1.1 值传递 引用传递"></a>1.1 值传递 引用传递</h3><p>Go 的函数参数传递都是值传递。</p>
+<p>所谓值传递：指在调用函数时将实际参数复制一份传递到函数中，这样在函数中如果对参数进行修改，将不会影响到实际参数。参数传递还有引用传递，</p>
+<p>所谓引用传递是指在调用函数时将实际参数的地址传递到函数中，那么在函数中对参数所进行的修改，将影响到实际参数</p>
+<p>因为 Go 里面的只有 map，slice，chan 是引用类型。变量区分值类型和引用类型。所谓值类型：变量和变量的值存在同一个位置。所谓引用类型：变量和变量的值是不同的位置，变量的值存储的是对值的引用。但并不是 map，slice，chan 的所有的变量在函数内都能被修改，不同数据类型的底层存储结构和实现可能不太一样，情况也就不一样。</p>
+<h3 id="1-2-slice-和-map-分别作为函数参数时有什么区别？"><a href="#1-2-slice-和-map-分别作为函数参数时有什么区别？" class="headerlink" title="1.2 slice 和 map 分别作为函数参数时有什么区别？"></a>1.2 slice 和 map 分别作为函数参数时有什么区别？</h3><p>make map 返回的结果：*hmap，它是一个指针，而我们之前讲过的 make slice 函数返回的是 Slice 结构体</p>
+<p>makemap 和 makeslice 的区别，带来一个不同点：当 map 和 slice 作为函数参数时，在函数参数内部对 map 的操作会影响 map 自身；而对 slice 却不会。</p>
+<p>主要原因：一个是指针（<em>hmap），一个是结构体（slice）。Go 语言中的函数传参都是值传递，在函数内部，参数会被 copy 到本地。</em>hmap指针 copy 完之后，仍然指向同一个 map，因此函数内部对 map 的操作会影响实参。而 slice 被 copy 后，会成为一个新的 slice，对它进行的操作不会影响到实参。</p>
+<h3 id="1-3-for-index-val-x3D-range-collection"><a href="#1-3-for-index-val-x3D-range-collection" class="headerlink" title="1.3 for index, val :&#x3D; range collection"></a>1.3 for index, val :&#x3D; range collection</h3><pre><code>b = d 
+c[a] = d
+</code></pre>
+<p>每次循环 :&#x3D; 生成一个短引用对象 index, val 下标和值，作用范围只存在该次循环中<br>val 短引用对原来的值拷贝后的值传递 对其进行修改不会影响到原来集合中的值</p>
+<h3 id="1-4-slice-append-http-c-biancheng-net-view-28-html"><a href="#1-4-slice-append-http-c-biancheng-net-view-28-html" class="headerlink" title="1.4 slice append http://c.biancheng.net/view/28.html"></a>1.4 slice append <a target="_blank" rel="noopener" href="http://c.biancheng.net/view/28.html">http://c.biancheng.net/view/28.html</a></h3><p>slice {<br>    cap<br>    len<br>    ptr 指向引用的底层数组的地址位置<br>}</p>
+<p>append 容量 地址 拷贝</p>
+<ol>
+<li>len &lt; cap len++ 将新元素放入空余空间</li>
+<li>len &#x3D;&#x3D; cap 扩容两倍 cap*2</li>
+</ol>
+<p>往一个切片中不断添加元素的过程，类似于<strong>公司搬家</strong>，公司发展初期，资金紧张，人员很少，所以只需要很小的房间即可容纳所有的员工，随着业务的拓展和收入的增加就需要扩充工位，但是办公地的大小是固定的，无法改变，因此公司只能选择搬家，每次搬家就需要将所有的人员转移到新的办公点。</p>
+<ol>
+<li>员工和工位就是切片中的元素。</li>
+<li>办公地就是分配好的内存。</li>
+<li>搬家就是重新分配内存。</li>
+<li>无论搬多少次家，公司名称始终不会变，代表外部使用切片的变量名不会修改。</li>
+<li>由于搬家后地址发生变化，因此内存“地址”也会有修改。</li>
+</ol>
+<h3 id="1-5-golang-map-hash-底层"><a href="#1-5-golang-map-hash-底层" class="headerlink" title="1.5 golang map hash 底层"></a>1.5 golang map hash 底层</h3><p>拉链法解决冲突<br>长度为2的幂次方 2^B ,B 是 buckets 数组的长度的对数</p>
+<p>桶里面会最多装 8 个 key，这些 key 之所以会落入同一个桶，是因为它们经过哈希计算后，哈希结果是“一类”的。在桶内，又会根据 key 计算出来的 hash 值的高 8 位来决定 key 到底落入桶内的哪个位置（一个桶内最多有8个位置）。</p>
+<p>如果有第 9 个 key-value 落入当前的 bucket，那就需要再构建一个 bucket ，通过 overflow 指针连接起来。</p>
+<h3 id="字符串-常量-string-byte-rune"><a href="#字符串-常量-string-byte-rune" class="headerlink" title="字符串 常量 string byte rune"></a>字符串 常量 string byte rune</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Lin_Bolun/article/details/116854849">https://blog.csdn.net/Lin_Bolun/article/details/116854849</a></p>
+<p>byte 等同于int8，常用来处理ascii字符<br>rune 等同于int32,常用来处理unicode或utf-8字符<br>string放在堆，底层是byte[]，不可修改。如果一定要改，拷贝转成[]byte，修改完转换成string </p>
+<p>string 输出按utf8编码的</p>
+<p>s1 :&#x3D; “123”<br>s1[0] &#x3D; ‘2’&#x2F;&#x2F;非法，不可直接修改</p>
+<p>type stringStruct struct {<br>    array unsafe.Pointer  &#x2F;&#x2F; 指向一个 [len]byte 的数组<br>    length int             &#x2F;&#x2F; 长度<br>}</p>
+<p>“123我爱中国”<br>byte[] len: 3 + 4<em>4 &#x3D; 19 占用：7</em>8位 7个字节<br>rune[] len: 7            占用：7*4 &#x3D; 28个字节</p>
+<h4 id="为什么字符串不允许修改？"><a href="#为什么字符串不允许修改？" class="headerlink" title="为什么字符串不允许修改？"></a>为什么字符串不允许修改？</h4><p>字符串默认在堆上分配内存存储，是不可变的字节数组，其头部指针指向一个字节数组。<br>string在内存中的存储结构是长度固定的字节数组，也就是说是字符串是不可变的。当要修改字符串的时候，需要转换为[]byte，修改完成后再转换回来。但是不论怎么转换，都必须重新分配内存，并复制数据，通过加号拼接字符串，每次都必须重新分配内存。</p>
+<p>字符串不能够被修改，所以这样定义的字符串内容被分配到只读内存段，而不是堆或栈上<br>字符串变量是可以共享底层字符串内容的，如果对字符串修改，那么后果是无法估计的</p>
+<p>如果非要修改</p>
+<p>str &#x3D; “hello” 使str重新分配内存，便不会修改原内存<br>bs :&#x3D; ([]byte)(str) bs[2] &#x3D; ‘o’ 可以把变量强制类型转换成字节slice，这样会为slice变量重新分配一段内存，并且会拷贝原来字符串的内容</p>
+<p>string底层[]byte<br>修改string时, 将原来的string拷贝一个新的[]byte，把拷贝出来的[]byte修改后，就可以表示新的string</p>
+<h4 id="string-存储不同的编码字符，如同时存储ascii-utf8-如何识别该字符的编码格式，-即划分字符边界？"><a href="#string-存储不同的编码字符，如同时存储ascii-utf8-如何识别该字符的编码格式，-即划分字符边界？" class="headerlink" title="string 存储不同的编码字符，如同时存储ascii, utf8 如何识别该字符的编码格式， 即划分字符边界？"></a>string 存储不同的编码字符，如同时存储ascii, utf8 如何识别该字符的编码格式， 即划分字符边界？</h4><p>定长编码<br>不管编号多大多小，统一按最长的来，位数不够高位补零。</p>
+<p>虽然字符边界解决了，但是有些浪费内存。而且字符集收录的越多，字符跨度越大，定长编码造成的浪费就越显著</p>
+<p>变长编码（UTF-8）<br>Go 语言默认的编码方式</p>
+<p>小编号少占字节，大编号多占字节</p>
+<p>那如何划分边界呢？</p>
+<p>编号	         编码模板	<br>[0,127]	         0???	                占一字节，且最高位标识为0<br>[128,2047]	    110??? 10???	        占用两个字节，且有固定标识位110和10<br>[2048,65535]	1110??? 10??? 10???	    占用三字节，且有固定标识位1110和10<br>[65536,…]	    11110??? 10??? …	    三个以上字节也遵循这样的规则</p>
+<p>01100101|01100111|01100111|01101111|1110。。。|1110。。。。|<br>e	     g        o        。        世         界</p>
+<h3 id="golang-container-x2F-heap"><a href="#golang-container-x2F-heap" class="headerlink" title="golang container &#x2F; heap"></a>golang container &#x2F; heap</h3><p>Go 提供了 container&#x2F;heap 这个包来实现堆的操作。堆实际上是一个树的结构，每个元素的值都是它的子树中最小的，因此根节点 index &#x3D; 0 的值是最小的，即<strong>最小堆</strong>。</p>
+<p>堆也是实现优先队列 Priority Queue 的常用方式。</p>
+<p>堆的 push 和 pop</p>
+<p>push 放入数组最后一位进行up</p>
+<p>pop 数组最后一位与首位交换， down</p>
+<p>type IHeap []item<br>func (h *IHeap)<br>Len() return len(*h)<br>Less(i, j) return h[i] &lt; h[j]<br>Swap(i, j) h[i],h[j] &#x3D; h[j], h[i]<br>Push h &#x3D; append(h, x)<br>Pop h &#x3D; h[:n-1]</p>
+<h3 id="数组与切片"><a href="#数组与切片" class="headerlink" title="数组与切片"></a>数组与切片</h3><ol>
+<li>数组 值类型    ；  切片 引用类型</li>
+<li>数组 值类型 大小固定的元素序列，声明时必须指定具体大小，且不可更改。<br>切片 引用类型 不直接存储数据元素序列，底层是对数组的截取引用，可以在运行时动态地增加或减少其大小，使用起来更灵活。</li>
+<li>切片底层是数组，若容量不足，需要对切片进行扩容时，不能直接对底层的数组进行扩容，而是通过append()函数，申请一个新的 cap*2 内存区域，再将原来的数组拷贝过来，才在后面增加元素。</li>
+</ol>
+<h3 id="golang-中-make-new-的联系与区别"><a href="#golang-中-make-new-的联系与区别" class="headerlink" title="golang 中 make, new 的联系与区别"></a>golang 中 make, new 的联系与区别</h3><p>在 Golang 中，new 和 make 都是用于创建新对象的内置函数，但它们的作用不同。</p>
+<p>new 函数用于分配内存并返回指向该类型零值的指针。它只接受一个参数，即要分配内存的类型。例如，new(int) 会分配一个 int 类型的内存块，并将其初始化为 0，然后返回指向该内存块的指针。由于 new 返回的是指针，所以通常用于分配结构体或其他复杂类型的内存。</p>
+<ol>
+<li><p>函数作用：new、make 都是为新对象变量分配内存的内置函数，在堆上分配内存。</p>
+</li>
+<li><p>函数参数：new 函数的参数只有一个值类型参数，  make函数的参数必须是引用类型(切片、map、channel)，根据引用类型的不同，参数个数不同，如切片可以加上长度len、容量cap两个参数。</p>
+</li>
+<li><p>函数返回值：new 为参数传入的值类型分配内存，并为该值赋零值，返回该值类型的指针(内存地址).       传 T 返*T<br>       make 为参数传入的引用类型分配内存，并完成初始化，返回的值是 参数传入的引用类型本身。 传 T 返 T</p>
+</li>
+</ol>
+<h3 id="结构体函数-是否绑定指针的作用？-todo"><a href="#结构体函数-是否绑定指针的作用？-todo" class="headerlink" title="结构体函数 是否绑定指针的作用？ todo"></a>结构体函数 是否绑定指针的作用？ todo</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wanghao72214/article/details/120013580">https://blog.csdn.net/wanghao72214/article/details/120013580</a></p>
+<h3 id="interface-空结构体-空接口"><a href="#interface-空结构体-空接口" class="headerlink" title="interface{}{} 空结构体 空接口"></a>interface{}{} 空结构体 空接口</h3><h2 id="二、goroutine-协程-gmp调度模型"><a href="#二、goroutine-协程-gmp调度模型" class="headerlink" title="二、goroutine 协程 gmp调度模型"></a>二、goroutine 协程 gmp调度模型</h2><h3 id="GMP-调度模型-解决程序里产生的多线程如何调度执行的问题"><a href="#GMP-调度模型-解决程序里产生的多线程如何调度执行的问题" class="headerlink" title="GMP 调度模型 解决程序里产生的多线程如何调度执行的问题"></a>GMP 调度模型 解决程序里产生的多线程如何调度执行的问题</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/xmcy001122/article/details/119392934">https://blog.csdn.net/xmcy001122/article/details/119392934</a></p>
+<p>全局队列</p>
+<p>G goroutine  go func(){…} 包含了当前 goroutine 的状态、堆栈、上下文 轻量一般大小2kb 无数量大小限制。</p>
+<p>P Processor 处理器不是真正cpu 默认数量为cpu核心数  连接GM的中间件 使G在M中执行 解决GM模型缺点引入的中间层 含有由G组成的本地队列，固定大小为256。 空则从其余P中work stealing或全局队列中取，满则减半到全局队列。<br>所有的 P 都在程序启动时创建，并保存在数组中，最多有 GOMAXPROCS(可配置) 个。</p>
+<p>调度器 shed</p>
+<p>M machine 实际在内核中工作的线程 默认最大10000个，可在程序运行中创建和复用空闲。时分复用执行P的本地队列里的G, 当在执行中的G产生阻塞时，P带着本地队列其余的G转移到一个新建或空闲的M里继续执行其余G。 g的时间片10ms, 超过轮到下一个g。<br>需要绑定 P 才能进行具体的任务执行的。</p>
+<p>总结，Go 调度器很轻量也很简单，足以撑起 goroutine 的调度工作，并且让 Go 具有了原生（强大）并发的能力。Go 调度本质是把大量的 goroutine 分配到少量线程上去执行，并利用多核并行，实现更强大的并发。</p>
+<p>更多的可以看这几篇文章：再见 Go 面试官：[GMP 模型，为什么要有 P？]、Go 群友提问：[Goroutine 数量控制在多少合适，会影响 GC 和调度？]、[work-stealing scheduler]</p>
+<h3 id="gmp-为什么要有P-https-juejin-cn-post-6968311281220583454"><a href="#gmp-为什么要有P-https-juejin-cn-post-6968311281220583454" class="headerlink" title="gmp 为什么要有P? https://juejin.cn/post/6968311281220583454"></a>gmp 为什么要有P? <a target="_blank" rel="noopener" href="https://juejin.cn/post/6968311281220583454">https://juejin.cn/post/6968311281220583454</a></h3><p>我的理解：起到对G的缓存队列， 就如同数据库的缓存 让p管理g的执行, m空闲就从p中去取, 不到万不得已不用去全局g中去取，减少频繁切换导致的资源开销。</p>
+<h3 id="goroutine切换-触发调度-的时机，-当-G-阻塞在M中时，会发生什么？"><a href="#goroutine切换-触发调度-的时机，-当-G-阻塞在M中时，会发生什么？" class="headerlink" title="goroutine切换(触发调度)的时机， 当 G 阻塞在M中时，会发生什么？"></a>goroutine切换(触发调度)的时机， 当 G 阻塞在M中时，会发生什么？</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37186127/article/details/125519834">https://blog.csdn.net/qq_37186127/article/details/125519834</a><br>我们需要知道在Go中代码的执行是需要线程（M）绑定 P 才能在CPU上执行</li>
+</ul>
+<p>如果说我们线程在执行的时候阻塞了，那么程序是不是要无限创建线程才能执行？</p>
+<p>在Go中，这种情况是不会阻塞调度的，而是会把goroutin挂起</p>
+<p>所谓挂起，就是让G进入某个数据结构，待ready后再继续执行，不会占用线程</p>
+<p>线程会进入schedule，继续消费队列，执行其它的G!</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/CJ-cooper/p/15270475.html">https://www.cnblogs.com/CJ-cooper/p/15270475.html</a><br>work-stealing调度算法：当M执行完了当前P的本地队列队列里的所有G后，P也不会就这么在那躺尸啥都不干，它会先尝试从全局队列队列寻找G来执行，如果全局队列为空，它会随机挑选另外一个P，从它的队列里中拿走一半的G到自己的队列中执行。</li>
+</ul>
+<p>如果一切正常，调度器会以上述的那种方式顺畅地运行，但这个世界没这么美好，总有意外发生，以下分析goroutine在两种例外情况下的行为。</p>
+<p>Go runtime会在下面的goroutine被阻塞的情况下运行另外一个goroutine：</p>
+<p>用户态阻塞&#x2F;唤醒</p>
+<p>当goroutine因为channel操作或者network I&#x2F;O而阻塞时（实际上golang已经用netpoller实现了goroutine网络I&#x2F;O阻塞不会导致M被阻塞，仅阻塞G，这里仅仅是举个栗子），对应的G会被放置到某个wait队列(如channel的waitq)，该G的状态由_Gruning变为_Gwaitting，而M会跳过该G尝试获取并执行下一个G，如果此时没有可运行的G供M运行，那么M将解绑P，并进入sleep状态；当阻塞的G被另一端的G2唤醒时（比如channel的可读&#x2F;写通知），G被标记为，尝试加入G2所在P的runnext（runnext是线程下一个需要执行的 Goroutine。）， 然后再是P的本地队列和全局队列。</p>
+<p>系统调用阻塞</p>
+<p>当M执行某一个G时候如果发生了阻塞操作，M会阻塞，如果当前有一些G在执行，调度器会把这个线程M从P中摘除，然后再创建一个新的操作系统的线程(如果有空闲的线程可用就复用空闲线程)来服务于这个P。当M系统调用结束时候，这个G会尝试获取一个空闲的P执行，并放入到这个P的本地队列。如果获取不到P，那么这个线程M变成休眠状态， 加入到空闲线程中，然后这个G会被放入全局队列中。</p>
+<h3 id="当写下go-func的时候，到底发生了什么？"><a href="#当写下go-func的时候，到底发生了什么？" class="headerlink" title="当写下go func的时候，到底发生了什么？"></a>当写下go func的时候，到底发生了什么？</h3><p>生成一个协程sudog, 放入全局G队列中<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37186127/article/details/125517300">https://blog.csdn.net/qq_37186127/article/details/125517300</a></p>
+<h3 id="若-主goroutine-比-子goroutine-先结束会有什么问题？"><a href="#若-主goroutine-比-子goroutine-先结束会有什么问题？" class="headerlink" title="若 主goroutine 比 子goroutine 先结束会有什么问题？"></a>若 主goroutine 比 子goroutine 先结束会有什么问题？</h3><h3 id="讲讲go的协程、协程与线程"><a href="#讲讲go的协程、协程与线程" class="headerlink" title="讲讲go的协程、协程与线程"></a>讲讲go的协程、协程与线程</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_49199646/article/details/109210547">https://blog.csdn.net/weixin_49199646/article/details/109210547</a> 内核无法感知的用户态级别的线程，有程序自行创建，管理，销毁。</p>
+<h2 id="三、-channel-通道-csp通信模型"><a href="#三、-channel-通道-csp通信模型" class="headerlink" title="三、 channel 通道 csp通信模型"></a>三、 channel 通道 csp通信模型</h2><h3 id="csp通信模型-https-zhuanlan-zhihu-com-p-313763247"><a href="#csp通信模型-https-zhuanlan-zhihu-com-p-313763247" class="headerlink" title="csp通信模型  https://zhuanlan.zhihu.com/p/313763247"></a>csp通信模型  <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/313763247">https://zhuanlan.zhihu.com/p/313763247</a></h3><p>CSP 是 Communicating Sequential Process 的简称，中文可以叫做通信顺序进程，是一种并发编程模型，用于描述两个独立的并发实体通过共享的通讯 channel(管道)进行通信的并发模型。<strong>CSP中 channel 不关注发送消息的实体，而关注与发送消息时使用的channel。</strong></p>
+<p>严格来说，CSP 是一门形式语言（类似于 ℷ calculus），用于描述并发系统中的互动模式，也因此成为一众面向并发的编程语言的理论源头</p>
+<p>Golang，其实只用到了 CSP 的很小一部分，即理论中的 Process&#x2F;Channel（对应到语言中的 goroutine&#x2F;channel）：goroutine 是实际并发执行的实体，每个实体之间是通过channel通讯来实现数据共享, 形成一套有序阻塞和可预测的并发模型。</p>
+<p>优点:<br>我的理解是这样的，对一个共享内存的对象，如果每个都要去修改的话，就必须得记得加锁和解锁，甚至更复杂的操作，而channel则是生产者和消费者，不需要关注锁和共享内存的复杂性，把共享内存看成一份输入和输出的数据</p>
+<h3 id="channel的底层结构？接收、发送消息的过程？-channel底层"><a href="#channel的底层结构？接收、发送消息的过程？-channel底层" class="headerlink" title="channel的底层结构？接收、发送消息的过程？ channel底层"></a>channel的底层结构？接收、发送消息的过程？ channel底层</h3><p>FIFO   CAS  </p>
+<p>结构体 buf lock sendx recvx qcount dataqsiz elemsize elemtype closed 是否已经关闭</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">type hchan struct &#123;</span><br><span class="line">	qcount   uint           	//当前通道元素个数（len）</span><br><span class="line">	dataqsiz uint           	//最大队列长度（cap）</span><br><span class="line">	buf      unsafe.Pointer 	//队列指针，指向队列内存位置</span><br><span class="line">	elemsize uint16				//单个元素大小</span><br><span class="line">	elemtype *_type 			//元素类型</span><br><span class="line">	closed   uint32				//标识通道状态</span><br><span class="line">	sendx    uint   			//下一个发送的元素在buf中存放的位置</span><br><span class="line">	recvx    uint   			//下一个接收的元素在buf中读取的位置</span><br><span class="line">	recvq    waitq  			//等待读消息的协程队列</span><br><span class="line">	sendq    waitq  			//等待发消息的协程队列</span><br><span class="line">	lock mutex					//互斥锁，保证不存在并发读写管道</span><br><span class="line">	//可以在GOROOT/src/runtime/chan.go里看到源码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">其中 buf 是一个循环队列，用来存储 channel 接收的数据，lock 用来保护数据安全，goroutine 来访问 channel 的 buf 之前，需要先获取锁。</span><br><span class="line">sendx 表示当前数据发送的的位置，recvx 表示当前数据接收的位置。sendq 和 recvq 是两个队列，这两个结构很重要，我们下面会讲到。</span><br><span class="line">qcount 表示当前 buf 中存储的数据个数，dataqsiz 表示 buf 可以接受的最大数据数量。elemtype 就表示数据的类型。</span><br><span class="line">channel 在使用 make 创建的时候，实际上会在堆上分配一块空间，初始化 hchan 结构，然后返回 hchan 的指针。这就是为什么在使用 channel 的时候，直接传递就可以，而不用获取 channel 的指针，这是因为 channel 本身就是指针。 </span><br></pre></td></tr></table></figure>
+<ul>
+<li>什么时候发生阻塞？</li>
+</ul>
+<ol>
+<li>向一个值为nil的管道写或读数据</li>
+<li>无缓冲区时单独的写或读数据</li>
+<li>缓冲区为空时进行读数据</li>
+<li>缓冲区满时进行写数据</li>
+</ol>
+<ul>
+<li>阻塞的本质？（channel如何使goroutine进入阻塞状态）<br>非缓存通道：往管道 ch 发送数据 发送超过缓存区0， 将 go阻塞 并 其抽象记录为 sudog 放入 sendx 发送阻塞队列 中，直到 recvx 有其他 sudog 来获取数据</li>
+</ul>
+<p>缓存通道：往管道 ch 发送数据 若发送超过缓存区大小， 将 go阻塞 并 其抽象记录为 sudog 放入 sendx 发送阻塞队列 中，直到有其他goroutine来读数据，释放缓存区, 解除阻塞状态。</p>
+<h3 id="golang-context-上下文-Waitgroup-add-done"><a href="#golang-context-上下文-Waitgroup-add-done" class="headerlink" title="golang context 上下文 (Waitgroup add done)"></a>golang context 上下文 (Waitgroup add done)</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/juanmaofeifei/p/14439957.html">https://www.cnblogs.com/juanmaofeifei/p/14439957.html</a><br>context主要是用于多个协程之间的统一控制，主要包括统一取消和统一超时。下面是关于context对多个协程进行统一控制的示例：</p>
+<p>假设有这样一个应用场景，一个公司（main）有一名经理(manager)和两名工人(worker)，公司下班（main exit）有两种可能：一：工人(worker)的工作时间已经达到合同约定的最大时长；二：经理(manager)提前叫停收工。两种可能满足其中一个即可下班。</p>
+<p>Context顾名思义是协程的上下文，主要用于跟踪协程的状态，可以做一些简单的协程控制，也能记录一些协程信息</p>
+<p>通过Context可以进一步简化控制代码，且更为友好的是，大多数go库，如http、各种db driver、grpc等都内置了对ctx.Done()的判断，我们只需要将ctx传入即可</p>
+<p>总结一下，cancelCtx的作用其实就两个， 1. 绑定父子节点，同步取消信号，父节点取消子节点也跟着取消,防止内存泄漏 2. 提供主动取消函数</p>
+<p>小结一下，context的主要功能就是用于控制协程退出和附加链路信息。核心实现的结构体有4个，最复杂的是cancelCtx，最常用的是cancelCtx和valueCtx。整体呈树状结构，父子节点间同步取消信号。</p>
+<h2 id="内存管理-gc-垃圾回收"><a href="#内存管理-gc-垃圾回收" class="headerlink" title="内存管理 gc 垃圾回收"></a>内存管理 gc 垃圾回收</h2><h4 id="内存管理-内存分配-内存泄漏"><a href="#内存管理-内存分配-内存泄漏" class="headerlink" title="内存管理 内存分配 内存泄漏"></a>内存管理 内存分配 内存泄漏</h4><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/76802887">https://zhuanlan.zhihu.com/p/76802887</a></p>
+<p>page span threadcache centralcache pageheap </p>
+<ol>
+<li><p>使用缓存提高效率。在存储的整个体系中到处可见缓存的思想，Go内存分配和管理也使用了缓存，利用缓存一是减少了系统调用的次数，二是降低了锁的粒度、减少加锁的次数，从这2点提高了内存管理效率。</p>
+</li>
+<li><p>以空间换时间，提高内存管理效率。空间换时间是一种常用的性能优化思想，这种思想其实非常普遍，比如Hash、Map、二叉排序树等数据结构的本质就是空间换时间，在数据库中也很常见，比如数据库索引、索引视图和数据缓存等，再如Redis等缓存数据库也是空间换时间的思想。</p>
+</li>
+</ol>
+<h3 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h3><p>go中的内存泄露一般都是goroutine泄露，就是goroutine没有被关闭，或者没有添加超时控制，让goroutine一只处于阻塞状态，不能被GC。</p>
+<h4 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37290103/article/details/116493163">https://blog.csdn.net/m0_37290103/article/details/116493163</a></p>
+<ul>
+<li>暂时性内存泄露</li>
+</ul>
+<ol>
+<li>只获取长字符串中的一段, 导致长字符串未释放， 方法：截取的时候加个空字符，再去除空字符 “ “+s[:][1:]</li>
+<li>只获取长slice中的一段, 导致长slice未释放    方法: 截取的时候加个空元素，再去除  append(a, s[:]…)[1:]</li>
+<li>在长slice 扩展新建slice拷贝时， 导致泄漏    方法: </li>
+<li>大型数组作为函数参数被频繁调用              方法： 使用数组指针传递<br>string相比于切片少了一个容量的cap字段，可以把string当成一个只读的切片类型。获取长string或切片中的一段内容，由于新生成的对象和老的string或切片共用一个内存空间，会导致老的string和切片资源暂时得不到释放，造成短暂的内存泄露。</li>
+</ol>
+<ul>
+<li>永久性内存泄露</li>
+</ul>
+<ol>
+<li>goroutine泄漏</li>
+<li>time.Ticker未关闭导致泄漏</li>
+<li>Finalizer导致泄漏</li>
+<li>Deferring Function Call导致泄漏</li>
+</ol>
+<p>无论是类似 timer 或者 ticker，都要记得 stop，就像使用 channel 也要记得 close 一样，否则会导致资源无法释放而产生泄露。</p>
+<h4 id="具体现象及解决方法"><a href="#具体现象及解决方法" class="headerlink" title="具体现象及解决方法"></a>具体现象及解决方法</h4><ol>
+<li>goroutine内存泄露 最常见的内存泄露 channel<br>goroutine 由于代码编写的缺陷，使程序运行时产生长期处于阻塞，挂起状态的goroutine，占用内存资源无法释放，产生的内存泄漏现象。</li>
+</ol>
+<p>泄露的原因大多集中在：<br>Goroutine 内正在进行 channel&#x2F;mutex 等读写操作，但由于逻辑问题，某些情况下会被一直阻塞。<br>Goroutine 内的业务逻辑进入死循环，资源一直无法释放。<br>Goroutine 内的业务逻辑进入长时间等待，有不断新增的 Goroutine 进入等待。</p>
+<p>channel 读写<br>当缓存区为空时，向 channel 接受数据，goroutine进入阻塞状态<br>当缓存区为满时，向 channel 发送数据，goroutine进入阻塞状态<br>在实际业务场景中，一般更复杂。基本是一大堆业务逻辑里，有一个 channel 的读写操作出现了问题，自然就阻塞了。</p>
+<p>nil channel<br>channel 没有初始化,无论你是读，还是写操作，都会造成阻塞。</p>
+<p>channel close状态, 可读不可写，一写就panic。<br>而读呢，如果channel还有数据，那么先读数据，如果channel里面已经没有数据了，还去读channel，那么此时读出来的是类型零值，对于v, ok :&#x3D; &lt;-ch这种双返回值的ok来说，ok被赋值为false。</p>
+<p>读取关闭后的无缓存通道，不管通道中是否有数据，返回值都为0和false。<br>读取关闭后的有缓存通道，将缓存数据读取完后，再读取返回值为0和false。</p>
+<p>for range 遍历channel<br>是runtime帮我们来判断，他的判断标准是 close(ch) 后跳出循环。<br>for range是阻塞式读取channel，只有channel close之后才会结束，否则会一直读取，通道里没有值了，还继续读取就会阻塞，程序就会报死锁。<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/yanyan42/article/details/125769989">https://blog.csdn.net/yanyan42/article/details/125769989</a></p>
+<p>waitgroup 同步锁 阻塞</p>
+<p>mutex.lock 互斥锁 阻塞</p>
+<p>排查方法<br>我们可以调用 runtime.NumGoroutine 方法来获取 Goroutine 的运行数量，进行前后一比较，就能知道有没有泄露了。</p>
+<p>但在业务服务的运行场景中，Goroutine 内导致的泄露，大多数处于生产、测试环境，因此更多的是使用 PProf：</p>
+<p>import (<br>    “net&#x2F;http”<br>     _ “net&#x2F;http&#x2F;pprof”<br>)</p>
+<p>http.ListenAndServe(“localhost:6060”, nil))<br>只要我们调用 <a target="_blank" rel="noopener" href="http://localhost:6060/debug/pprof/goroutine?debug=1%EF%BC%8CPProf">http://localhost:6060/debug/pprof/goroutine?debug=1，PProf</a> 会返回所有带有堆栈跟踪的 Goroutine 列表。</p>
+<p>也可以利用 PProf 的其他特性进行综合查看和分析，这块参考我之前写的《Go 大杀器之性能剖析 PProf》，基本是全村最全的教程了。</p>
+<ol start="2">
+<li>time.Ticker未关闭导致泄漏</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//创建定时器，每隔1秒后，定时器就会给channel发送一个事件(当前时间)</span><br><span class="line">    ticker := time.NewTicker(time.Second * 1)</span><br><span class="line"></span><br><span class="line">    i := 0</span><br><span class="line">    go func() &#123;</span><br><span class="line">        for &#123; //循环</span><br><span class="line">            &lt;-ticker.C</span><br><span class="line">            i++</span><br><span class="line">            fmt.Println(&quot;i = &quot;, i)</span><br><span class="line"></span><br><span class="line">            if i == 5 &#123;</span><br><span class="line">                ticker.Stop() //停止定时器</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;() //别忘了()</span><br></pre></td></tr></table></figure>
+
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>string和切片不正确的使用是会引起短暂的内存泄露，当然还有一些句柄的连接未释放都会触发内存泄露。不过最主要的内存泄露还是出现在对channel的错误使用，造成goroutine上面。大量的内存泄露会造成程序的oom，当然包括程序书写不当造成的内存泄露，同时也包括运行环境和语言版本存在的问题，都会造成内存不会被释放。oom原因很多需要根据实际出现的问题进行探究。</p>
+<h2 id="gc-垃圾回收"><a href="#gc-垃圾回收" class="headerlink" title="gc 垃圾回收"></a>gc 垃圾回收</h2><h3 id="程序运行时的内存空间（堆栈）"><a href="#程序运行时的内存空间（堆栈）" class="headerlink" title="程序运行时的内存空间（堆栈）"></a>程序运行时的内存空间（堆栈）</h3><p>之所以要区分堆和栈，是由于程序需要两种不同特性的内存形似而确定的。在C++中，新建一个对象有两种方式，静态分配和动态分配。</p>
+<p><strong>栈由系统进行管理，而堆由程序员自己管理</strong></p>
+<p>静态分配（数组）已在代码中定义了大小，编译时完成内存空间的分配</p>
+<p>一般来说，静态分配用于初始化已知对象大小的时候，比如int a[10];如果我们能够确定这个数组是10个，我们可以使用这种方式。这种方式所需要的内存在编译期间即可确定，因此操作系统便可以预先确定所指定大小内存给变量，并且可以在变量生命周期结束后自动释放。</p>
+<p>动态分配(切片) 无法在编译时确定大小，需要动态分配内存空间</p>
+<p>然而在某些场景下，可能需要根据某些情况来申请内存，比如int* a &#x3D;new int[count];而变量count可能就来自于某个配置文件或者用户手动输入的值。这个时候操作系统就无法再预先确定内存大小，并且不执行到new int[count]这一行代码的时候，是无法知道所要分配的内存大小，因此操作系统分出一块内存，用来进行动态分配。并且规定，动态分配的内存需要由客户端自行管理。</p>
+<h3 id="stw"><a href="#stw" class="headerlink" title="stw"></a>stw</h3><p>STW(stop the world)，STW的过程中，CPU不执行用户代码，全部用于垃圾回收，这个过程的影响很大，Golang进行了多次的迭代优化来解决这个问题。</p>
+<p>1.3以前的版本使用标记-清扫的方式，整个过程都需要STW。<br>1.3版本分离了标记和清扫的操作，标记过程STW，清扫过程并发执行。<br>1.5版本在标记过程中使用三色标记法。回收过程主要有四个阶段，其中，标记和清扫都并发执行的，但标记阶段的前后需要STW一定时间来做GC的准备工作和栈的re-scan。</p>
+<p>强弱三色不变式<br>从 root set 根节点集合 出发扫描栈空间的对象，及其被引用的对象， 扫描堆的对象，及其引用的对象<br>栈内对象的操作无屏障技术<br>插入屏障 针对堆的扫描黑对白引用，白变灰，最后扫描栈stw<br>删除屏障 针对堆的扫描黑或灰删除任意引用，被删除的引用变灰，下一轮再回收，造成回收精度低<br>混合写屏障 扫描栈对象全部标为黑，新增的栈对象也为黑，堆中被删除的引用标为灰，被添加的引用标为灰</p>
+<p>屏障<br><a target="_blank" rel="noopener" href="https://juejin.cn/post/7178777729028866104">https://juejin.cn/post/7178777729028866104</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/xia_2017/article/details/128834696">https://blog.csdn.net/xia_2017/article/details/128834696</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/334999060">https://zhuanlan.zhihu.com/p/334999060</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/74853110#:~:text=%E5%9C%A8Golang%E4%B8%AD,%E8%BF%87%E7%A8%8B%E9%9C%80%E8%A6%81STW%E3%80%82">https://zhuanlan.zhihu.com/p/74853110#:~:text=%E5%9C%A8Golang%E4%B8%AD,%E8%BF%87%E7%A8%8B%E9%9C%80%E8%A6%81STW%E3%80%82</a></p>
+<h3 id="gc-垃圾回收-1"><a href="#gc-垃圾回收-1" class="headerlink" title="gc 垃圾回收"></a>gc 垃圾回收</h3><ul>
+<li><p>v1.1 stw （ignore） 全程stw 无并发？</p>
+</li>
+<li><p>v1.3 标记时stw 清除时并发 </p>
+</li>
+<li><p>v1.5 三色+屏障技术(插入屏障，删除屏障)(强弱三色不变式) 达到 标记时并发 清除时并发 的效果</p>
+</li>
+</ul>
+<p>可以看出，有两个问题, 在三色标记法中,是不希望被发生的</p>
+<ul>
+<li>条件1: 一个白色对象被黑色对象引用(白色被挂在黑色下)</li>
+<li>条件2: 灰色对象与它之间的可达关系的白色对象遭到破坏(灰色同时丢了该白色)</li>
+</ul>
+<p>当以上两个条件<strong>同时满足</strong>时, 就会出现对象丢失现象!</p>
+<p>插入屏障(写屏障): 标记过程中 黑色引用白色， 白色变为灰色 。 成本高只在堆中使用，所以扫描结束后会再扫描一遍栈中对象，检查是否有新引用的白色对象。保护堆中黑色对象引用白色对象。</p>
+<p>删除屏障： 标记过程中 白色或灰色对象 对白色对象的引用 被删除， 被删除的对象变为灰色。保护灰色对象到白色对象的路径不会断来实现的。 在这种实现方式中，回收器悲观的认为所有被删除的对象（白色对象）都可能会被黑色对象引用。</p>
+<h4 id="v1-8-三色-混合写屏障"><a href="#v1-8-三色-混合写屏障" class="headerlink" title="v1.8 三色+混合写屏障"></a>v1.8 三色+混合写屏障</h4><ol>
+<li>栈上对象全标为黑色（无须stw重新扫描）</li>
+<li>扫描过程中，栈上新创建的对象全部标为黑色</li>
+<li>扫描过程中，被删除引用的对象标为灰</li>
+<li>扫描过程中，被引用的对象标为灰</li>
+</ol>
+<h4 id="gc-触发时间"><a href="#gc-触发时间" class="headerlink" title="gc 触发时间"></a>gc 触发时间</h4><p>分为<strong>系统触发</strong>和<strong>主动触发</strong>。</p>
+<p>空间不足 时间定时 手动</p>
+<p>1）gcTriggerHeap：当所分配的堆大小达到阈值（由控制器计算的触发堆的大小）时，将会触发。</p>
+<p>2）gcTriggerTime：当距离上一个 GC 周期的时间超过一定时间时，将会触发。时间周期以runtime.forcegcperiod 变量为准，默认 2 分钟。</p>
+<p>3）gcTriggerCycle：如果没有开启 GC，则启动 GC。 给手动runtime.GC的接口，调用启动gc</p>
+<p>4）通过手动触发的 runtime.GC 方法。</p>
+<h2 id="并发编程-sync"><a href="#并发编程-sync" class="headerlink" title="并发编程 sync"></a>并发编程 sync</h2><p>mutex rwmutex waitgroup atomic cas map pool once  </p>
+<h3 id="golang-select"><a href="#golang-select" class="headerlink" title="golang select"></a>golang select</h3><p>在Golang中，select用于多个通道中进行读写操作时，同时又需要一次只处理一个，这个时候就需要用到select。<br>select具体的功能及用法如下：<br>1、select和case结合使用，每次执行select，都会只执行其中1个case或者执行default语句。<br>2、当没有case或者default可以执行时，select则阻塞，等待直到有1个case可以执行。<br>3、当有多个case可以执行时，则随机选择1个case执行。<br>4、case后面跟的必须是读或者写通道的操作，否则编译出错。</p>
+<p>mutex rwlock 悲观锁 读多写少</p>
+<p>map 线程安全</p>
+<p>空结构体 不占内存</p>
+<p>切片数组 值类型直接对应内存中的值 引用类型指向内存中存放该值的地址</p>
+<p>gc 三色标记 stw 停止 sink 对象池</p>
+<p>go怎么做到面向对象</p>
+<p>&#x2F;*<br>如果延时topic里有一亿条消息，如何取出即将到延时时间的消息？全表扫描？<br>看你说服务QPS很高，对于高并发场景下有什么需要注意的问题<br>异步调用一定比同步调用快吗<br>100的QPS，同步调用开100个进程，是否比多线程（线程池）更优？<br>*&#x2F;</p>
+<p>gmp gc<br>channel slice map context<br>sync并发编程 </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/05/daily/" rel="prev" title="综合笔记">
+      <i class="fa fa-chevron-left"></i> 综合笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/04/10/redis-docker/" rel="next" title="linux docker 安装redis">
+      linux docker 安装redis <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#golang-%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">golang 学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%9F%BA%E7%A1%80%E5%8F%98%E9%87%8F-%E5%80%BC%E4%BC%A0%E9%80%92-%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92-slice-map"><span class="nav-number">1.1.</span> <span class="nav-text">一、基础变量 值传递 引用传递 slice map</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%80%BC%E4%BC%A0%E9%80%92-%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92-slice-forrange-append"><span class="nav-number">1.1.1.</span> <span class="nav-text">值传递 引用传递 slice forrange append</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%80%BC%E4%BC%A0%E9%80%92-%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.1 值传递 引用传递</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-slice-%E5%92%8C-map-%E5%88%86%E5%88%AB%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E6%97%B6%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.2 slice 和 map 分别作为函数参数时有什么区别？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-for-index-val-x3D-range-collection"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.3 for index, val :&#x3D; range collection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-slice-append-http-c-biancheng-net-view-28-html"><span class="nav-number">1.1.5.</span> <span class="nav-text">1.4 slice append http:&#x2F;&#x2F;c.biancheng.net&#x2F;view&#x2F;28.html</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-golang-map-hash-%E5%BA%95%E5%B1%82"><span class="nav-number">1.1.6.</span> <span class="nav-text">1.5 golang map hash 底层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2-%E5%B8%B8%E9%87%8F-string-byte-rune"><span class="nav-number">1.1.7.</span> <span class="nav-text">字符串 常量 string byte rune</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8D%E5%85%81%E8%AE%B8%E4%BF%AE%E6%94%B9%EF%BC%9F"><span class="nav-number">1.1.7.1.</span> <span class="nav-text">为什么字符串不允许修改？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#string-%E5%AD%98%E5%82%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E7%BC%96%E7%A0%81%E5%AD%97%E7%AC%A6%EF%BC%8C%E5%A6%82%E5%90%8C%E6%97%B6%E5%AD%98%E5%82%A8ascii-utf8-%E5%A6%82%E4%BD%95%E8%AF%86%E5%88%AB%E8%AF%A5%E5%AD%97%E7%AC%A6%E7%9A%84%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F%EF%BC%8C-%E5%8D%B3%E5%88%92%E5%88%86%E5%AD%97%E7%AC%A6%E8%BE%B9%E7%95%8C%EF%BC%9F"><span class="nav-number">1.1.7.2.</span> <span class="nav-text">string 存储不同的编码字符，如同时存储ascii, utf8 如何识别该字符的编码格式， 即划分字符边界？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#golang-container-x2F-heap"><span class="nav-number">1.1.8.</span> <span class="nav-text">golang container &#x2F; heap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%8E%E5%88%87%E7%89%87"><span class="nav-number">1.1.9.</span> <span class="nav-text">数组与切片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#golang-%E4%B8%AD-make-new-%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.10.</span> <span class="nav-text">golang 中 make, new 的联系与区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%87%BD%E6%95%B0-%E6%98%AF%E5%90%A6%E7%BB%91%E5%AE%9A%E6%8C%87%E9%92%88%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F-todo"><span class="nav-number">1.1.11.</span> <span class="nav-text">结构体函数 是否绑定指针的作用？ todo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interface-%E7%A9%BA%E7%BB%93%E6%9E%84%E4%BD%93-%E7%A9%BA%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.12.</span> <span class="nav-text">interface{}{} 空结构体 空接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81goroutine-%E5%8D%8F%E7%A8%8B-gmp%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">二、goroutine 协程 gmp调度模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GMP-%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B-%E8%A7%A3%E5%86%B3%E7%A8%8B%E5%BA%8F%E9%87%8C%E4%BA%A7%E7%94%9F%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A6%82%E4%BD%95%E8%B0%83%E5%BA%A6%E6%89%A7%E8%A1%8C%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.1.</span> <span class="nav-text">GMP 调度模型 解决程序里产生的多线程如何调度执行的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gmp-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89P-https-juejin-cn-post-6968311281220583454"><span class="nav-number">1.2.2.</span> <span class="nav-text">gmp 为什么要有P? https:&#x2F;&#x2F;juejin.cn&#x2F;post&#x2F;6968311281220583454</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#goroutine%E5%88%87%E6%8D%A2-%E8%A7%A6%E5%8F%91%E8%B0%83%E5%BA%A6-%E7%9A%84%E6%97%B6%E6%9C%BA%EF%BC%8C-%E5%BD%93-G-%E9%98%BB%E5%A1%9E%E5%9C%A8M%E4%B8%AD%E6%97%B6%EF%BC%8C%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.2.3.</span> <span class="nav-text">goroutine切换(触发调度)的时机， 当 G 阻塞在M中时，会发生什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%93%E5%86%99%E4%B8%8Bgo-func%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.2.4.</span> <span class="nav-text">当写下go func的时候，到底发生了什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8B%A5-%E4%B8%BBgoroutine-%E6%AF%94-%E5%AD%90goroutine-%E5%85%88%E7%BB%93%E6%9D%9F%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">1.2.5.</span> <span class="nav-text">若 主goroutine 比 子goroutine 先结束会有什么问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B2%E8%AE%B2go%E7%9A%84%E5%8D%8F%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.2.6.</span> <span class="nav-text">讲讲go的协程、协程与线程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-channel-%E9%80%9A%E9%81%93-csp%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">三、 channel 通道 csp通信模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#csp%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9E%8B-https-zhuanlan-zhihu-com-p-313763247"><span class="nav-number">1.3.1.</span> <span class="nav-text">csp通信模型  https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;313763247</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#channel%E7%9A%84%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84%EF%BC%9F%E6%8E%A5%E6%94%B6%E3%80%81%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E8%BF%87%E7%A8%8B%EF%BC%9F-channel%E5%BA%95%E5%B1%82"><span class="nav-number">1.3.2.</span> <span class="nav-text">channel的底层结构？接收、发送消息的过程？ channel底层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#golang-context-%E4%B8%8A%E4%B8%8B%E6%96%87-Waitgroup-add-done"><span class="nav-number">1.3.3.</span> <span class="nav-text">golang context 上下文 (Waitgroup add done)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-gc-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="nav-number">1.4.</span> <span class="nav-text">内存管理 gc 垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D-%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F"><span class="nav-number">1.4.0.1.</span> <span class="nav-text">内存管理 内存分配 内存泄漏</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F"><span class="nav-number">1.4.1.</span> <span class="nav-text">内存泄漏</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E7%8E%B0%E8%B1%A1%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">具体现象及解决方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gc-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="nav-number">1.5.</span> <span class="nav-text">gc 垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E7%9A%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%EF%BC%88%E5%A0%86%E6%A0%88%EF%BC%89"><span class="nav-number">1.5.1.</span> <span class="nav-text">程序运行时的内存空间（堆栈）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stw"><span class="nav-number">1.5.2.</span> <span class="nav-text">stw</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gc-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6-1"><span class="nav-number">1.5.3.</span> <span class="nav-text">gc 垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#v1-8-%E4%B8%89%E8%89%B2-%E6%B7%B7%E5%90%88%E5%86%99%E5%B1%8F%E9%9A%9C"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">v1.8 三色+混合写屏障</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gc-%E8%A7%A6%E5%8F%91%E6%97%B6%E9%97%B4"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">gc 触发时间</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-sync"><span class="nav-number">1.6.</span> <span class="nav-text">并发编程 sync</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#golang-select"><span class="nav-number">1.6.1.</span> <span class="nav-text">golang select</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">SoarYu</p>
+  <div class="site-description" itemprop="description">Done is better than perfect!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SoarYu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

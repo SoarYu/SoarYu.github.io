@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.soar2568.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="测试环境 操作系统： Linux Ubuntu20.0.4 Golang版本： 1.17 Nacos版本：  2.1.0 CoreDNS版本：1.9.3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ospp记录(四) 项目测试文档">
+<meta property="og:url" content="http://blog.soar2568.top/2022/09/15/coredns-test-report/index.html">
+<meta property="og:site_name" content="Soar2568">
+<meta property="og:description" content="测试环境 操作系统： Linux Ubuntu20.0.4 Golang版本： 1.17 Nacos版本：  2.1.0 CoreDNS版本：1.9.3">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://blog.soar2568.top/img/coredns-test-report/test1.png">
+<meta property="og:image" content="http://blog.soar2568.top/img/coredns-test-report/test2.png">
+<meta property="og:image" content="http://blog.soar2568.top/img/coredns-test-report/test3.png">
+<meta property="og:image" content="http://blog.soar2568.top/img/coredns-test-report/test4.png">
+<meta property="og:image" content="http://blog.soar2568.top/img/coredns-test-report/test5.png">
+<meta property="og:image" content="http://blog.soar2568.top/img/coredns-test-report/test6.png">
+<meta property="og:image" content="http://blog.soar2568.top/img/coredns-test-report/test7.png">
+<meta property="article:published_time" content="2022-09-15T19:47:43.000Z">
+<meta property="article:modified_time" content="2023-07-04T08:09:47.312Z">
+<meta property="article:author" content="SoarYu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.soar2568.top/img/coredns-test-report/test1.png">
+
+<link rel="canonical" href="http://blog.soar2568.top/2022/09/15/coredns-test-report/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>ospp记录(四) 项目测试文档 | Soar2568</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Soar2568</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.soar2568.top/2022/09/15/coredns-test-report/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="SoarYu">
+      <meta itemprop="description" content="Done is better than perfect!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Soar2568">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ospp记录(四) 项目测试文档
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-09-15 19:47:43" itemprop="dateCreated datePublished" datetime="2022-09-15T19:47:43+00:00">2022-09-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-07-04 08:09:47" itemprop="dateModified" datetime="2023-07-04T08:09:47+00:00">2023-07-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ospp%E8%AE%B0%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">ospp记录</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><ul>
+<li>操作系统： Linux Ubuntu20.0.4</li>
+<li>Golang版本： 1.17</li>
+<li>Nacos版本：  2.1.0</li>
+<li>CoreDNS版本：1.9.3<span id="more"></span>
+<strong>Nacos-Coredns-Plugin插件编译脚本</strong><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cd</span> GOPATH</span></span><br><span class="line">cd $GOPATH/src/</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">remove codes</span></span><br><span class="line">rm -rf coredns</span><br><span class="line">rm -rf nacos-coredns-plugin</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">clone</span> current codes</span></span><br><span class="line">git clone https://github.com/nacos-group/nacos-coredns-plugin.git</span><br><span class="line">git clone https://github.com/coredns/coredns.git</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cd</span> coredns directory</span></span><br><span class="line">cd $GOPATH/src/coredns</span><br><span class="line">git checkout -b v1.9.3 v1.9.3</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">copy nacos plugin to coredns</span></span><br><span class="line">cp -r ../nacos-coredns-plugin/nacos plugin/</span><br><span class="line">cp -r ../nacos-coredns-plugin/forward/setup.go plugin/forward</span><br><span class="line">cp -r ../nacos-coredns-plugin/conf conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">insert nacos into plugin</span></span><br><span class="line">sed -i &#x27;/hosts/a\\t&quot;nacos&quot;,&#x27; core/dnsserver/zdirectives.go</span><br><span class="line">sed -i &#x27;/coredns\/plugin\/hosts/a\\t_ &quot;github.com/coredns/coredns/plugin/nacos&quot;&#x27; core/plugin/zplugin.go</span><br><span class="line">sed -i &#x27;/hosts:hosts/a\nacos:nacos&#x27; plugin.cfg</span><br><span class="line"></span><br><span class="line">go mod tidy</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">build</span></span><br><span class="line">make</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h2><p>在原来的v1.6.7分支上，修改 个测试用例，新增 个测试用例</p>
+<h3 id="nacos-client-test-go"><a href="#nacos-client-test-go" class="headerlink" title="nacos_client_test.go"></a>nacos_client_test.go</h3><p><strong>测试用例一：</strong>TestNacosClient_getAllServiceNames</p>
+<ul>
+<li>预期结果：获取Nacos服务端里注册的所有服务名并存入AllDoms</li>
+<li>实际结果：成功获取Nacos服务端里注册的所有服务名并存入AllDoms<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">func TestNacosClient_getAllServiceNames(t *testing.T) &#123;</span><br><span class="line">	GrpcClient = grpcClientTest</span><br><span class="line">	nacosClientTest.getAllServiceNames()</span><br><span class="line"></span><br><span class="line">	AllDoms.DLock.Lock()</span><br><span class="line">	defer AllDoms.DLock.Unlock()</span><br><span class="line">	doms := GrpcClient.GetAllServicesInfo()</span><br><span class="line"></span><br><span class="line">	for _, dom := range doms &#123;</span><br><span class="line">		assert.True(t, AllDoms.Data[dom])</span><br><span class="line">	&#125;</span><br><span class="line">	if len(doms) == len(AllDoms.Data) &#123;</span><br><span class="line">		t.Log(&quot;Get all serviceName from servers passed&quot;)</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		t.Error(&quot;Get all serviceName from servers error&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div align="center">
+  <img src="/img/coredns-test-report/test1.png"></img>
+</div></li>
+</ul>
+<p><strong>测试用例二：</strong>TestNacosClient_getDomNow</p>
+<ul>
+<li>预期结果：获取Nacos服务端里某个服务的具体信息并存入缓存中</li>
+<li>实际结果：成功获取Nacos服务端里某个服务的具体信息并存入缓存中<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">func TestNacosClient_getServiceNow(t *testing.T) &#123;</span><br><span class="line">	GrpcClient = grpcClientTest</span><br><span class="line">	nacosClientTest.getAllServiceNames()</span><br><span class="line">	testServiceMap := NewConcurrentMap()</span><br><span class="line"></span><br><span class="line">	for serviceName, _ := range AllDoms.Data &#123;</span><br><span class="line">		nacosClientTest.getServiceNow(serviceName, &amp;nacosClientTest.serviceMap, &quot;0.0.0.0&quot;)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	for serviceName, _ := range AllDoms.Data &#123;</span><br><span class="line">		testService := GrpcClient.GetService(serviceName)</span><br><span class="line">		testServiceMap.Set(serviceName, testService)</span><br><span class="line">		s, ok := nacosClientTest.GetDomainCache().Get(serviceName)</span><br><span class="line">		assert.True(t, ok)</span><br><span class="line">		service := s.(model.Service)</span><br><span class="line">		assert.True(t, len(service.Hosts) == len(testService.Hosts))</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	if len(nacosClientTest.GetDomainCache()) == len(testServiceMap) &#123;</span><br><span class="line">		t.Log(&quot;Get all servicesInfo from servers passed&quot;)</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		t.Error(&quot;Get all servicesInfo from servers error&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div align="center">
+  <img src="/img/coredns-test-report/test2.png"></img>
+</div></li>
+</ul>
+<h3 id="nacos-grpc-client-test-go"><a href="#nacos-grpc-client-test-go" class="headerlink" title="nacos_grpc_client_test.go"></a>nacos_grpc_client_test.go</h3><p><strong>测试用例三：</strong>TestGetAllServicesInfo</p>
+<ul>
+<li>预期结果：gRPC请求获取Nacos服务端里注册的所有服务名</li>
+<li>实际结果：成功通过gRPC请求获取Nacos服务端里注册的所有服务名<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">func TestGetAllServicesInfo(t *testing.T) &#123;</span><br><span class="line">	services := grpcClientTest.GetAllServicesInfo()</span><br><span class="line">	if len(services) &gt; 0 &#123;</span><br><span class="line">		t.Log(&quot;GrpcClient get all servicesInfo passed&quot;)</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		t.Log(&quot;GrpcClient get all servicesInfo empty&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div align="center">
+  <img src="/img/coredns-test-report/test3.png"></img>
+</div></li>
+</ul>
+<p><strong>测试用例四：</strong>TestGetService</p>
+<ul>
+<li>预期结果：gRPC请求获取Nacos服务端某个服务的具体信息</li>
+<li>实际结果：成功通过gRPC请求获取Nacos服务端某个服务的具体信息<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">func TestGetService(t *testing.T) &#123;</span><br><span class="line">	services := grpcClientTest.GetAllServicesInfo()</span><br><span class="line">	serviceMap := NewConcurrentMap()</span><br><span class="line">	for _, serviceName := range services &#123;</span><br><span class="line">		service := grpcClientTest.GetService(serviceName)</span><br><span class="line">		if assert.NotNil(t, service) &#123;</span><br><span class="line">			serviceMap.Set(serviceName, service)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	if serviceMap.Count() == len(services) &#123;</span><br><span class="line">		t.Log(&quot;GrpcClient get service passed&quot;)</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		t.Error(&quot;GrpcClient get service error&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div align="center">
+  <img src="/img/coredns-test-report/test4.png"></img>
+</div></li>
+</ul>
+<p><strong>测试用例五：</strong>TestSubscribe</p>
+<ul>
+<li>预期结果：gRPC订阅Nacos服务端某个服务</li>
+<li>实际结果：成功通过gRPC订阅Nacos服务端某个服务<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">func TestSubscribe(t *testing.T) &#123;</span><br><span class="line">	doms := grpcClientTest.GetAllServicesInfo()</span><br><span class="line">	for _, dom := range doms &#123;</span><br><span class="line">		err := grpcClientTest.Subscribe(dom)</span><br><span class="line">		if err != nil &#123;</span><br><span class="line">			t.Error(&quot;GrpcClient subscribe service error&quot;)</span><br><span class="line">			return</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	t.Log(&quot;GrpcClient subscribe service passed&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div align="center">
+  <img src="/img/coredns-test-report/test5.png"></img>
+</div></li>
+</ul>
+<p><strong>测试用例六：</strong>TestCallback</p>
+<ul>
+<li>预期结果：当Nacos服务端服务发生改变时，通过回调函数更新客户端的服务数据</li>
+<li>实际结果：当Nacos服务端服务发生改变时，成功通过回调函数更新客户端的服务数据<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">func TestCallback(t *testing.T) &#123;</span><br><span class="line">    services := model.Service&#123;</span><br><span class="line">            ......</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">    grpcClientTest.nacosClient.GetDomainCache().Set(&quot;demo.go&quot;, services)</span><br><span class="line"></span><br><span class="line">    newServices := model.Service&#123;</span><br><span class="line">            ······</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    grpcClientTest.Callback(newServices.Hosts, nil)</span><br><span class="line"></span><br><span class="line">	s, _ := grpcClientTest.nacosClient.GetDomainCache().Get(&quot;demo.go&quot;)</span><br><span class="line"></span><br><span class="line">	updateServices := s.(model.Service)</span><br><span class="line"></span><br><span class="line">	if len(newServices.Hosts) == len(updateServices.Hosts) &#123;</span><br><span class="line">		t.Log(&quot;GrpcClient Service SubscribeCallback passed&quot;)</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		t.Error(&quot;GrpcClient Service SubscribeCallback error&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div align="center">
+  <img src="/img/coredns-test-report/test6.png"></img>
+</div></li>
+</ul>
+<h3 id="setup-test-go"><a href="#setup-test-go" class="headerlink" title="setup_test.go"></a>setup_test.go</h3><p><strong>测试用例七：</strong>TestNacosParse</p>
+<ul>
+<li>预期结果：通过配置文件配置Nacos服务器的 NamespaceId 和 ip地址和端口 .</li>
+<li>实际结果：成功配置Nacos服务器的 NamespaceId 和 ip地址和端口 .<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">setup_test.go: 24 - 63 行</span><br><span class="line">func TestNacosParse(t *testing.T) &#123;</span><br><span class="line">    ·······</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div align="center">
+  <img src="/img/coredns-test-report/test7.png"></img>
+</div></li>
+</ul>
+<h3 id="所有测试用例运行结果"><a href="#所有测试用例运行结果" class="headerlink" title="所有测试用例运行结果"></a>所有测试用例运行结果</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">=== RUN   TestDnsCache_Updated</span><br><span class="line">    dns_cache_test.go:26: Out of date test is passed</span><br><span class="line">    dns_cache_test.go:32: Updated is passed.</span><br><span class="line">--- PASS: TestDnsCache_Updated (0.00s)</span><br><span class="line">=== RUN   TestGet</span><br><span class="line">    httpclient_test.go:40: Success to test http client get</span><br><span class="line">--- PASS: TestGet (0.00s)</span><br><span class="line">=== RUN   TestNacosClient_GetDomain</span><br><span class="line">--- PASS: TestNacosClient_GetDomain (0.00s)</span><br><span class="line">=== RUN   TestNacosClient_getAllServiceNames</span><br><span class="line">    nacos_client_test.go:75: Get all serviceName from servers passed</span><br><span class="line">--- PASS: TestNacosClient_getAllServiceNames (0.05s)</span><br><span class="line">=== RUN   TestNacosClient_getServiceNow</span><br><span class="line">    nacos_client_test.go:100: Get all servicesInfo from servers passed</span><br><span class="line">--- PASS: TestNacosClient_getServiceNow (2.80s)</span><br><span class="line">=== RUN   TestDomain_SrvInstances</span><br><span class="line">    nacos_domain_test.go:30: Domain.srvInstances weight passed.</span><br><span class="line">    nacos_domain_test.go:37: Domain.srvInstances valid passed.</span><br><span class="line">--- PASS: TestDomain_SrvInstances (0.00s)</span><br><span class="line">=== RUN   TestGetAllServicesInfo</span><br><span class="line">    nacos_grpc_client_test.go:23: GrpcClient get all servicesInfo passed</span><br><span class="line">--- PASS: TestGetAllServicesInfo (0.03s)</span><br><span class="line">=== RUN   TestGetService</span><br><span class="line">    nacos_grpc_client_test.go:39: GrpcClient get service passed</span><br><span class="line">--- PASS: TestGetService (0.03s)</span><br><span class="line">=== RUN   TestSubscribe</span><br><span class="line">    nacos_grpc_client_test.go:54: GrpcClient subscribe service passed</span><br><span class="line">--- PASS: TestSubscribe (0.03s)</span><br><span class="line">=== RUN   TestCallback</span><br><span class="line">    nacos_grpc_client_test.go:181: GrpcClient Service SubscribeCallback passed</span><br><span class="line">--- PASS: TestCallback (0.00s)</span><br><span class="line">=== RUN   TestServerManager_NextServer</span><br><span class="line">    server_manager_test.go:29: ServerManager.NextServer test is passed.</span><br><span class="line">--- PASS: TestServerManager_NextServer (0.00s)</span><br><span class="line">=== RUN   TestServerManager_RefreshServerListIfNeed</span><br><span class="line">    server_manager_test.go:39: ServerManager.RefreshServerListIfNeed test is passed.</span><br><span class="line">--- PASS: TestServerManager_RefreshServerListIfNeed (0.00s)</span><br><span class="line">=== RUN   TestNacosParse</span><br><span class="line">init nacos plugin...</span><br><span class="line">init nacos client.</span><br><span class="line">2022/09/15 16:05:03 [INFO] logDir:&lt;C:\Users\Yu\logs&gt;   cacheDir:&lt;C:\Users\Yu\nacos-go-client-cache&gt;</span><br><span class="line">    setup_test.go:54: Passed</span><br><span class="line">--- PASS: TestNacosParse (1.18s)</span><br><span class="line">=== RUN   TestUDPServer_StartServer</span><br><span class="line">    udp_server_test.go:43: Udp server test passed.</span><br><span class="line">--- PASS: TestUDPServer_StartServer (0.02s)</span><br><span class="line">=== RUN   TestTryDecompressData</span><br><span class="line">    util_and_comms_test.go:32: Gzip test is passed.</span><br><span class="line">--- PASS: TestTryDecompressData (0.00s)</span><br><span class="line">PASS</span><br><span class="line">ok  	nacos-coredns-plugin/nacos	4.624s</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h2><p>1.6.7版本：</p>
+<h3 id="50000"><a href="#50000" class="headerlink" title="50000"></a>50000</h3><p>[Status] Testing complete</p>
+<p>Statistics:</p>
+<p>  Parse input file:     once<br>  Ended due to:         reaching end of file</p>
+<p>  Queries sent:         50000 queries<br>  Queries completed:    50000 queries<br>  Queries lost:         0 queries<br>  Queries delayed(?):   0 queries</p>
+<p>  RTT max:              0.200666 sec<br>  RTT min:              0.000063 sec<br>  RTT average:          0.012621 sec<br>  RTT std deviation:    0.010875 sec<br>  RTT out of range:     0 queries</p>
+<p>  Percentage completed: 100.00%<br>  Percentage lost:        0.00%</p>
+<p>  Started at:           Sat Sep 17 09:49:54 2022<br>  Finished at:          Sat Sep 17 09:50:35 2022<br>  Ran for:              41.475793 seconds</p>
+<p>  Queries per second:   1205.522460 qps</p>
+<p>[Status] Testing complete</p>
+<p>Statistics:</p>
+<p>  Parse input file:     once<br>  Ended due to:         reaching end of file</p>
+<p>  Queries sent:         50000 queries<br>  Queries completed:    50000 queries<br>  Queries lost:         0 queries<br>  Queries delayed(?):   0 queries</p>
+<p>  RTT max:              0.093154 sec<br>  RTT min:              0.000066 sec<br>  RTT average:          0.010944 sec<br>  RTT std deviation:    0.005928 sec<br>  RTT out of range:     0 queries</p>
+<p>  Percentage completed: 100.00%<br>  Percentage lost:        0.00%</p>
+<p>  Started at:           Sat Sep 17 09:50:58 2022<br>  Finished at:          Sat Sep 17 09:51:31 2022<br>  Ran for:              33.176316 seconds</p>
+<p>  Queries per second:   1507.099221 qps</p>
+<p>[Status] Testing complete</p>
+<p>Statistics:</p>
+<p>  Parse input file:     once<br>  Ended due to:         reaching end of file</p>
+<p>  Queries sent:         50000 queries<br>  Queries completed:    50000 queries<br>  Queries lost:         0 queries<br>  Queries delayed(?):   0 queries</p>
+<p>  RTT max:              0.127623 sec<br>  RTT min:              0.000097 sec<br>  RTT average:          0.013324 sec<br>  RTT std deviation:    0.008517 sec<br>  RTT out of range:     0 queries</p>
+<p>  Percentage completed: 100.00%<br>  Percentage lost:        0.00%</p>
+<p>  Started at:           Sat Sep 17 09:51:56 2022<br>  Finished at:          Sat Sep 17 09:52:33 2022<br>  Ran for:              36.864735 seconds</p>
+<p>  Queries per second:   1356.309763 qps</p>
+<h3 id="500000"><a href="#500000" class="headerlink" title="500000"></a>500000</h3><p>Statistics:</p>
+<p>  Parse input file:     once<br>  Ended due to:         reaching end of file</p>
+<p>  Queries sent:         500000 queries<br>  Queries completed:    499767 queries<br>  Queries lost:         233 queries<br>  Queries delayed(?):   0 queries</p>
+<p>  RTT max:              1578.041083 sec<br>  RTT min:              0.000016 sec<br>  RTT average:          0.036432 sec<br>  RTT std deviation:    0.027122 sec<br>  RTT out of range:     18 queries</p>
+<p>  Percentage completed:  99.95%<br>  Percentage lost:        0.05%</p>
+<p>  Started at:           Fri Sep 16 17:46:10 2022<br>  Finished at:          Fri Sep 16 18:17:38 2022<br>  Ran for:              1887.486418 seconds</p>
+<p>  Queries per second:   264.779124 qps</p>
+<p>[Status] Testing complete</p>
+<p>Statistics:</p>
+<p>  Parse input file:     once<br>  Ended due to:         reaching end of file</p>
+<p>  Queries sent:         500000 queries<br>  Queries completed:    499857 queries<br>  Queries lost:         143 queries<br>  Queries delayed(?):   0 queries</p>
+<p>  RTT max:              1158.509071 sec<br>  RTT min:              0.000013 sec<br>  RTT average:          0.036213 sec<br>  RTT std deviation:    0.028113 sec<br>  RTT out of range:     24 queries</p>
+<p>  Percentage completed:  99.97%<br>  Percentage lost:        0.03%</p>
+<p>  Started at:           Fri Sep 16 18:19:12 2022<br>  Finished at:          Fri Sep 16 18:43:54 2022<br>  Ran for:              1482.300741 seconds</p>
+<p>  Queries per second:   337.216994 qps</p>
+<p>[Status] Testing complete</p>
+<p>Statistics:</p>
+<p>  Parse input file:     once<br>  Ended due to:         reaching end of file</p>
+<p>  Queries sent:         500000 queries<br>  Queries completed:    499692 queries<br>  Queries lost:         308 queries<br>  Queries delayed(?):   0 queries</p>
+<p>  RTT max:              1594.459308 sec<br>  RTT min:              0.000014 sec<br>  RTT average:          0.039982 sec<br>  RTT std deviation:    0.034464 sec<br>  RTT out of range:     23 queries</p>
+<p>  Percentage completed:  99.94%<br>  Percentage lost:        0.06%</p>
+<p>  Started at:           Fri Sep 16 19:03:18 2022<br>  Finished at:          Fri Sep 16 19:35:33 2022<br>  Ran for:              1935.047773 seconds</p>
+<p>  Queries per second:   258.232384 qps</p>
+<h3 id="5000000"><a href="#5000000" class="headerlink" title="5000000"></a>5000000</h3><p>新版本：</p>
+<p>50000<br>[Status] Testing complete</p>
+<p>Statistics:</p>
+<p>  Parse input file:     once<br>  Ended due to:         reaching end of file</p>
+<p>  Queries sent:         50000 queries<br>  Queries completed:    50000 queries<br>  Queries lost:         0 queries<br>  Queries delayed(?):   0 queries</p>
+<p>  RTT max:              0.052808 sec<br>  RTT min:              0.000063 sec<br>  RTT average:          0.009972 sec<br>  RTT std deviation:    0.003560 sec<br>  RTT out of range:     0 queries</p>
+<p>  Percentage completed: 100.00%<br>  Percentage lost:        0.00%</p>
+<p>  Started at:           Fri Sep 16 22:07:58 2022<br>  Finished at:          Fri Sep 16 22:08:35 2022<br>  Ran for:              37.832932 seconds</p>
+<p>  Queries per second:   1321.599923 qps</p>
+<p>[Status] Testing complete</p>
+<p>Statistics:</p>
+<p>  Parse input file:     once<br>  Ended due to:         reaching end of file</p>
+<p>  Queries sent:         50000 queries<br>  Queries completed:    50000 queries<br>  Queries lost:         0 queries<br>  Queries delayed(?):   0 queries</p>
+<p>  RTT max:              0.066514 sec<br>  RTT min:              0.000061 sec<br>  RTT average:          0.007880 sec<br>  RTT std deviation:    0.004037 sec<br>  RTT out of range:     0 queries</p>
+<p>  Percentage completed: 100.00%<br>  Percentage lost:        0.00%</p>
+<p>  Started at:           Fri Sep 16 22:08:52 2022<br>  Finished at:          Fri Sep 16 22:09:26 2022<br>  Ran for:              34.318542 seconds</p>
+<p>  Queries per second:   1456.938351 qps</p>
+<h3 id="500000-1"><a href="#500000-1" class="headerlink" title="500000"></a>500000</h3><p>[Status] Testing complete</p>
+<p>Statistics:</p>
+<p>  Parse input file:     once<br>  Ended due to:         reaching end of file</p>
+<p>  Queries sent:         500000 queries<br>  Queries completed:    500000 queries<br>  Queries lost:         0 queries<br>  Queries delayed(?):   0 queries</p>
+<p>  RTT max:              0.062532 sec<br>  RTT min:              0.000032 sec<br>  RTT average:          0.005649 sec<br>  RTT std deviation:    0.002476 sec<br>  RTT out of range:     0 queries</p>
+<p>  Percentage completed: 100.00%<br>  Percentage lost:        0.00%</p>
+<p>  Started at:           Sat Sep 17 00:00:22 2022<br>  Finished at:          Sat Sep 17 00:05:07 2022<br>  Ran for:              284.796569 seconds</p>
+<p>  Queries per second:   1755.639128 qps</p>
+<p>[Status] Testing complete</p>
+<p>Statistics:</p>
+<p>  Parse input file:     once<br>  Ended due to:         reaching end of file</p>
+<p>  Queries sent:         500000 queries<br>  Queries completed:    500000 queries<br>  Queries lost:         0 queries<br>  Queries delayed(?):   0 queries</p>
+<p>  RTT max:              0.098301 sec<br>  RTT min:              0.000062 sec<br>  RTT average:          0.011365 sec<br>  RTT std deviation:    0.003072 sec<br>  RTT out of range:     0 queries</p>
+<p>  Percentage completed: 100.00%<br>  Percentage lost:        0.00%</p>
+<p>  Started at:           Sat Sep 17 09:03:59 2022<br>  Finished at:          Sat Sep 17 09:08:55 2022<br>  Ran for:              296.729115 seconds</p>
+<p>  Queries per second:   1685.038558 qps</p>
+<h3 id="5000000-1"><a href="#5000000-1" class="headerlink" title="5000000"></a>5000000</h3><p>[Status] Testing complete</p>
+<p>Statistics:</p>
+<p>  Parse input file:     once<br>  Ended due to:         reaching end of file</p>
+<p>  Queries sent:         5000000 queries<br>  Queries completed:    4999780 queries<br>  Queries lost:         220 queries<br>  Queries delayed(?):   0 queries</p>
+<p>  RTT max:              3074.590919 sec<br>  RTT min:              0.000022 sec<br>  RTT average:          0.011621 sec<br>  RTT std deviation:    0.004951 sec<br>  RTT out of range:     20 queries</p>
+<p>  Percentage completed: 100.00%<br>  Percentage lost:        0.00%</p>
+<p>  Started at:           Fri Sep 16 22:10:31 2022<br>  Finished at:          Fri Sep 16 23:06:25 2022<br>  Ran for:              3353.644673 seconds</p>
+<p>  Queries per second:   1490.849654 qps</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/06/project-report/" rel="prev" title="ospp记录（四）结题报告">
+      <i class="fa fa-chevron-left"></i> ospp记录（四）结题报告
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/10/18/gitlab-docker-deploy/" rel="next" title="gitlab-docker部署">
+      gitlab-docker部署 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">测试环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">测试用例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nacos-client-test-go"><span class="nav-number">2.1.</span> <span class="nav-text">nacos_client_test.go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nacos-grpc-client-test-go"><span class="nav-number">2.2.</span> <span class="nav-text">nacos_grpc_client_test.go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setup-test-go"><span class="nav-number">2.3.</span> <span class="nav-text">setup_test.go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%80%E6%9C%89%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">2.4.</span> <span class="nav-text">所有测试用例运行结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95"><span class="nav-number">3.</span> <span class="nav-text">压力测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#50000"><span class="nav-number">3.1.</span> <span class="nav-text">50000</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#500000"><span class="nav-number">3.2.</span> <span class="nav-text">500000</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5000000"><span class="nav-number">3.3.</span> <span class="nav-text">5000000</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#500000-1"><span class="nav-number">3.4.</span> <span class="nav-text">500000</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5000000-1"><span class="nav-number">3.5.</span> <span class="nav-text">5000000</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">SoarYu</p>
+  <div class="site-description" itemprop="description">Done is better than perfect!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SoarYu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
